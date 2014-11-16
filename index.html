@@ -1,14 +1,13 @@
-
-
 <!DOCTYPE html>
 <html>
 <!-- <head><title> Data Binding Fun</title></head> -->
 <body>
-<h1>Index.html</h1>
+<h1>JabJS - One Hit At A Time</h1>
 <h2 id='time'></h2>
 
-<div id="div">mydiv</div>
-<p id="p">This is a paragraph.</p>
+<div id="div">Div contents</div>
+
+<p id="p">Paragraph contents.</p>
 
 <select id="select">
   <option value="volvo">Volvo</option>  
@@ -16,20 +15,17 @@
   <option value="saab">Saab</option>
 </select>
 
-<input id="input" value="input-value">
+<input id="input" value="Input-Value">
 
-<textarea id="textarea" rows="4" cols="50">textarea text</textarea>
+<textarea id="textarea" rows="4" cols="50">TextArea-Value</textarea>
 
-<div>
-<textarea id="eval"></textarea>
-<button type="button" id="btn">execute</button>
-</div>
 <input id="checkbox" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+
 </body>
 
 <script text="text/javascript" src="jab.js"></script>
 <style>
-.elem { border: 1px dotted red; }
+div { border: 1px dotted red; }
 </style>
 <script>
 //DOM elements
@@ -54,12 +50,13 @@ user.details = {};
 // bindModelToElem(user.details, 'div', div);
 // bindModelToElem(user, 'select', select);
 // bindModelToElem(user, 'checked', checkbox);
-
-jab(user, 'input', [input, textarea]);    
 jab(user, 'p', p);
-jab(user.details, 'div', div);
-jab(user, 'select', select);
-jab(user, 'checked', checkbox);
+
+// jab(user, 'input', [input, textarea]);    
+
+// jab(user.details, 'div', div);
+// jab(user, 'select', select);
+// jab(user, 'checked', checkbox);
 
 
 user.input = 'moshe';

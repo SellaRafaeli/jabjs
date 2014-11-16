@@ -46,7 +46,7 @@ function syncDomElemsOnChange(obj, property, domElems) {
 
 function markBindings(obj, property, domElems) {
     obj.bindings = obj.bindings || {};
-    obj[property] = domElems;         
+    obj.bindings[property] = domElems;         
 }
 
 function bindModelToElem(obj, property, domElems) {
@@ -64,7 +64,7 @@ function bindModelToElem(obj, property, domElems) {
     return obj;
 }
 
-function bindObjPropToElements(obj, property, domElems) {
+function bindObjPropToElements(obj, property, domElems) {    
     bindModelToElem(obj, property, domElems);
 }
 
