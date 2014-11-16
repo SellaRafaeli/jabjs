@@ -1,4 +1,4 @@
-//generic lib
+/* helpers */
 function toArray(itemOrArray) {
     var arrayified = ((itemOrArray).constructor === Array) ? itemOrArray : [itemOrArray];
     return arrayified;
@@ -9,8 +9,10 @@ function addListenerMulti(element, eventsString, func) {
     events.forEach(function(event) { element.addEventListener(event, func, false);  });    
 }
 
+/* DOM manipulation */
 //return the property to access DOM element's value - 'value', 'innerHTML', 'selectedIndex', etc. 
 function getDomValueProp(elem) { 
+
     if (elem.type == 'checkbox') return 'checked'; 
     if (elem.nodeName == 'INPUT') return 'value'; 
     if (elem.nodeName == 'TEXTAREA') return 'value'; 
@@ -44,6 +46,7 @@ function syncDomElemsOnChange(obj, property, domElems) {
     });        
 }
 
+/* JabJS logic */
 function markBindings(obj, property, domElems) {
     obj.bindings = obj.bindings || {};
     obj.bindings[property] = domElems;         
@@ -51,6 +54,7 @@ function markBindings(obj, property, domElems) {
 
 function bindModelToElem(obj, property, domElems) {
     var domElems = toArray(domElems);
+    var currentValue = obj[property] || ''; 
 
     Object.defineProperty(obj, property, {
         get: function() { return getDomValue(domElems[0]); }, 
@@ -61,6 +65,7 @@ function bindModelToElem(obj, property, domElems) {
     if (domElems.length > 1) { syncDomElemsOnChange(obj, property, domElems); }               
 
     markBindings(obj, property, domElems);    
+    obj[property] = currentValue; //force assignment to trigger binding
     return obj;
 }
 

@@ -1,69 +1,39 @@
 <!DOCTYPE html>
 <html>
-<!-- <head><title> Data Binding Fun</title></head> -->
+<head>
+<title>JabJS - Super Simple Data-Binding</title>
+<link rel="stylesheet" type="text/css" href="jabStyle.css">
+</head>
+</head>
 <body>
-<h1>JabJS - One Hit At A Time</h1>
-<h2 id='time'></h2>
+<h1>JabJS - Super Simple Data-Binding</h1>
 
-<div id="div">Div contents</div>
+<div id="div">#div</div>
 
-<p id="p">Paragraph contents.</p>
+<p id="p">#p.</p>
 
 <select id="select">
-  <option value="volvo">Volvo</option>  
-  <option value="audi">Audi</option>
-  <option value="saab">Saab</option>
+  <option value="select-opt-1">#select (Option 1)</option>  
+  <option value="select-opt-2">#select (Option 2)</option>
 </select>
 
-<input id="input" value="Input-Value">
+<input id="input" placeholder="#input">
 
-<textarea id="textarea" rows="4" cols="50">TextArea-Value</textarea>
+<textarea id="textarea" placeholder="#textarea"></textarea>
 
-<input id="checkbox" type="checkbox" name="vehicle" value="Bike">I have a bike<br>
+<label><input type="checkbox" id="checkbox" value="value">#Checkbox</label>
+
+<div id="instructions">
+    <div id='instructionsTitle'> JabJS data-binding: </div>
+    <ol>
+        <li> <pre> user = {name: 'Ron Swanson'}; </pre> </li>
+        <li> <pre> jab(user, 'name', document.getElementById('input')); </pre> </li>        
+        <li> <pre> user.name = 'Bruce Wayne' <span class='purple'>//sweet!</span> </pre> </li>        
+    </ol>
+    <span id='footer'>Try it yourself on this page, or read the <a href="http://ynet.co.il"> docs &  source code </a>. &#169; sellarafaeli 2014. </span>
+</div>
 
 </body>
 
 <script text="text/javascript" src="jab.js"></script>
-<style>
-div, p, select, input, textarea { border: 1px dotted red; margin: 5px; display: inline; }
-</style>
-<script>
-//DOM elements
-function get(id) {
-    return document.getElementById(id);
-}
-
-input = get('input');
-textarea = get('textarea');
-select = get('select');
-p = get('p');
-div =get('div');
-form = get('form');
-checkbox = get('checkbox');
-
-//JS models && usage
-user = {};
-user.details = {}; 
-
-// bindModelToElem(user, 'input', [input, textarea]);    
-// bindModelToElem(user, 'p', p);
-// bindModelToElem(user.details, 'div', div);
-// bindModelToElem(user, 'select', select);
-// bindModelToElem(user, 'checked', checkbox);
-jab(user, 'p', p);
-
-// jab(user, 'input', [input, textarea]);    
-
-// jab(user.details, 'div', div);
-// jab(user, 'select', select);
-// jab(user, 'checked', checkbox);
-
-
-user.input = 'moshe';
-user.name = "joe";
-user.idx = 1;
-user.checked = true;
-
-document.getElementById('time').textContent = "loaded at "+(new Date());
-</script>
 </html>
