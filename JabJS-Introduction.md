@@ -124,7 +124,7 @@ jab.bind(user.details, 'name', document.getElementById('input'));
 * Tiny: ~1.5K compressed. 
 * Pure JS, creates bindings without changing HTML markup: Keep your JS out of your markup.
 * Source code is easily readable and modifiable - understand exactly what is happening, customize to your own needs. 
-* Orthogonal to other JS libraries - use it anywhere, without depending or modifying anything else. 
+* Orthogonal to other JS libraries - use it anywhere, with any other library or templating, without depending or modifying anything else. 
 
 #### Etymology
 "JabJS" is named after its main inspiration, KnockoutJS. 
