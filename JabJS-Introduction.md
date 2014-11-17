@@ -3,7 +3,7 @@ JabJS - Introduction
 
 **JabJS** allows you to bind any JavaScript model to any DOM element using the following idiomatic format:
 
-***jab.bind(model, property, domElement[s])***
+```jab.bind(model, 'property', domElement[s])```
 
 Example:
 ```js
@@ -11,8 +11,6 @@ user = {name: 'John Lennon'}; //any JavaScript object
 jab.bind(user, 'name', document.getElementByid('input')); //user is now two-way binding with #input
 ```
 
-The idiomatic syntax is:
-jab.bind(model, propertyp
 #### Demo Page
 This tutorial is accompanied by [the JabJS demo page](https://rawgit.com/SellaRafaeli/jabjs/master/index.html), which includes some HTML and the JabJS library. Every example given in this document can (and should) be executed on that page via the JavaScript console, to demonstrate JabJS usage.  
 
@@ -41,24 +39,67 @@ JabJS supports binding to multiple elements, enabling three-way (actually, *n*-w
 jab.bind(user, 'name', [document.getElementById('input'), document.getElementById('textarea'), document.getElementById('div')]);
 ```
 
+Now #input, #textarea, #div and user.name are all bounded to each other. 
 
-#### Technical Points
-* JabJS is stand-alone & dependency-free, simply include and run. ~1.5K compressed. 
-* Pure JS, creates bindings without changing HTML markup.
+#### Special Bindings
+By default, JabJS binds by value. In our examples, `user.name`'s value is input as the element's appropriate value. These are binded by using the following syntax (note the new fourth parameter):
 
 ```js
-jab.bind(model, propertyNameAsString, domElement[s]ToBindTo, [optsHash])
+jab.bind(model, 'property', domElem, {opts: bindingName})
 ```
 
+or
 
+```js
+jab.bind(model, 'property', domElem, 'bindingName')
+```
 
-Idiomatic usage example: 
+JabJS ships by default with a few special bindings:
 
+One special binding is the `show` binding:
+```
+jab.bind(user, 'name', document.getElementById('input'), 'show')
+```
 
-#### Binding To Multiple Elements
+which 'shows' the element (makes it visible) if and only if user.name is a truthy value.
+
+Another default special binding is the `click` binding, which adds the value as an 'onclick' handler to the binded elements. Notice this requires the `value` to be a **function**.
+
+```
+alertClicked = function(){ alert('clicked') };
+user.clickHandler = alertClicked;
+jab.bind(user, 'clickHandler', document.getElementById('input'), {func: 'click'});
+```
 
 #### Custom Bindings
+Adding your own binding is as easy as pie, using the following pattern:
 
+```
+myFunc = function(elem, value) {
+  //do something with element and value
+};
+jab.bind(user, 'name', document.getElementById('input'), {func: myFunc});
+```
+
+The above binds `user.name` to #input, by running ``myFunc`` on the binded element (#input) and applying `myFunc` on the element, using the value in `user.name`. 
+
+Let's observe a concrete example:
+
+```
+setBorderWidth = function(elem, value) {
+  elem.style.borderWidth = value+'px';
+};
+borderData = {width: 20};
+jab.bind(borderData, 'width', document.getElementById('input'), {func: setBorderWidth});
+```
+
+Now, whenever ```borderData.width``` is set, ```setBorderWidth``` will be execute on the binded element (and will set its width).
+
+#### Technical Points
+* Stand-alone & dependency-free, simply include and run.
+* Tiny: ~1.5K compressed. 
+* Pure JS, creates bindings without changing HTML markup: Keep your JS out of your markup.
+* Source code is easily readable and modifiable - understand exactly what is happening, customize to your own needs. 
 
 #### Etymology
-
+"JabJS" is named after its main inspiration, KnockoutJS. 
