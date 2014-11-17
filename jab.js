@@ -31,12 +31,6 @@ function setDomValue(elem, newValue) {
     elem[propName] = newValue;
 }
 
-function setDomElemsVal(domElems, newValue) {
-    domElems.forEach(function(domElem) { 
-        setDomValue(domElem, newValue) 
-    });
-}
-
 function syncDomElemsOnChange(obj, property, domElems) {        
     var events = 'change keyup';
     domElems.forEach(function(elem) { 
@@ -46,26 +40,60 @@ function syncDomElemsOnChange(obj, property, domElems) {
     });        
 }
 
-/* JabJS logic */
-function markBindings(obj, property, domElems) {
-    obj.bindings = obj.bindings || {};
-    obj.bindings[property] = domElems;         
+function modifyElems(domElems, newValue, opts) {
+    var modifyingFunc = getModifyingFunc(opts)
+
+    domElems.forEach(function(domElem) { 
+        modifyingFunc(domElem, newValue);
+    });
 }
 
-function bindModelToElem(obj, property, domElems) {
+function getModifyingFunc(opts) {
+    var opts = opts || {};    
+    if (opts.func) {
+        if ((opts.func.constructor) == Function) return opts.func; 
+        switch(opts.func) {
+            case 'show': return show;
+            case 'bgcolor': return bgcolor;                                
+        }
+    }
+
+    return setDomValue; //default 
+}
+
+/*custom bindings */
+function show(elem, value) {
+    value ? elem.style.visibility = null : elem.style.visibility = 'hidden';
+}
+
+function bgcolor(elem, value) {
+    elem.style.backgroundColor = value;
+}
+
+function click(elem, value) {
+    elem.addEventListener('click', value);
+}
+
+/* JabJS logic */
+function markBindings(obj, property, domElems, opts) {
+    obj.bindings = obj.bindings || {};
+    obj.bindings[property] = {elems: domElems, opts: opts};         
+}
+
+function bindModelToElem(obj, property, domElems, opts) {
     var domElems = toArray(domElems);
-    var currentValue = obj[property] || ''; 
+    var currentValue = obj[property] || '';     
 
     Object.defineProperty(obj, property, {
         get: function() { return getDomValue(domElems[0]); }, 
-        set: function(newValue) { setDomElemsVal(domElems, newValue) },            
+        set: function(newValue) { modifyElems(domElems, newValue, opts); },            
         configurable: true
     });
 
     if (domElems.length > 1) { syncDomElemsOnChange(obj, property, domElems); }               
 
-    markBindings(obj, property, domElems);    
-    obj[property] = currentValue; //force assignment to trigger binding
+    markBindings(obj, property, domElems, opts);    
+    obj[property] = currentValue; //force assignment to trigger binding with the initial data
     return obj;
 }
 

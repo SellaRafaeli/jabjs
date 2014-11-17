@@ -3,6 +3,7 @@ function get(id) {
     return document.getElementById(id);
 }
 
+button = get('button');
 input = get('input');
 textarea = get('textarea');
 select = get('select');
