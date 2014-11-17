@@ -4,13 +4,13 @@ JabJS - Introduction
 **JabJS** allows you to bind any JavaScript model to any DOM element using the following idiomatic format:
 
 ```js
-jab.bind(model, 'property', domElement[s])
+jab.bind(model, 'property', domElement[s]);
 ```
 
 Example:
 ```js
 user = {name: 'John Lennon'}; //any JavaScript object
-jab.bind(user, 'name', document.getElementByid('input')); //user is now two-way binding with #input
+jab.bind(user, 'name', document.getElementByid('input')); //user is now binded (two-way) with #input
 ```
 
 #### Demo Page
@@ -29,7 +29,7 @@ After this, user.name would be *binded* to the `#div` element: that is, changing
 #### Two-Way Binding
 For `div`s, binding is a one-way process: changes in the object update the HTML. However, for some elements we want a two-way binding: changes in the model should update the view (HTML), and changes in the view (HTML) should update the model. That way, for example, if we use an `<input id='input'>` element, we could access its value in the JS (without having to manually extract it every time we needed it). Form submissions can work immediately on the JS, without parsing the DOM upon submission. 
 
-JabJS immediately performs two-way data-bindings on appropriate HTML elements, so suppose you have an HTML element `<input id="input">` and a JavaScript object ```js user = {name: 'John Lennon'} ```. After including JabJS, to bind the object to the input you would run the same idiomatic JabJS binding:
+JabJS immediately performs two-way data-bindings on appropriate HTML elements, so suppose you have an HTML element `<input id="input">` and a JavaScript object `user = {name: 'John Lennon'}`. After including JabJS, to bind the object to the input you would run the same idiomatic JabJS binding:
 
 ```js
 jab.bind(user, 'name', document.getElementById('input'));
@@ -62,7 +62,7 @@ jab.bind(model, 'property', domElem, 'bindingName')
 JabJS ships by default with a few special bindings:
 
 One special binding is the `show` binding:
-```
+```js
 jab.bind(user, 'name', document.getElementById('input'), 'show')
 ```
 
@@ -70,7 +70,7 @@ which 'shows' the element (makes it visible) if and only if user.name is a truth
 
 Another default special binding is the `click` binding, which adds the value as an 'onclick' handler to the binded elements. Notice this requires the `value` to be a **function**.
 
-```
+```js
 alertClicked = function(){ alert('clicked') };
 user.clickHandler = alertClicked;
 jab.bind(user, 'clickHandler', document.getElementById('input'), {func: 'click'});
@@ -79,7 +79,7 @@ jab.bind(user, 'clickHandler', document.getElementById('input'), {func: 'click'}
 #### Custom Bindings
 Adding your own binding is as easy as pie, using the following pattern:
 
-```
+```js
 myFunc = function(elem, value) {
   //do something with element and value
 };
@@ -90,7 +90,7 @@ The above binds `user.name` to #input, by running ``myFunc`` on the binded eleme
 
 Let's observe a concrete example:
 
-```
+```js
 setBorderWidth = function(elem, value) {
   elem.style.borderWidth = value+'px';
 };
@@ -100,11 +100,26 @@ jab.bind(borderData, 'width', document.getElementById('input'), {func: setBorder
 
 Now, whenever ```borderData.width``` is set, ```setBorderWidth``` will be execute on the binded element (and will set its width).
 
+#### Binding sub-elements
+If your model is 
+
+```js
+user = {details: {name: 'Abraham', age: 900}};
+```
+You can jab.bind it by using the idiomatic syntax on whatever sub-object you wish to bind:
+```js
+jab.bind(user.details, 'name', document.getElementById('input'));
+```
+
 #### Technical Points
 * Stand-alone & dependency-free, simply include and run.
 * Tiny: ~1.5K compressed. 
 * Pure JS, creates bindings without changing HTML markup: Keep your JS out of your markup.
 * Source code is easily readable and modifiable - understand exactly what is happening, customize to your own needs. 
+* Orthogonal to other JS libraries - use it anywhere, without depending or modifying anything else. 
 
 #### Etymology
 "JabJS" is named after its main inspiration, KnockoutJS. 
+
+#### Contact
+For any questions, help or pull requests please contact sella.rafaeli@gmail.com. 
