@@ -30,3 +30,11 @@ JabJS currently supports elements of the following types:
 [https://rawgit.com/SellaRafaeli/jabjs/master/index.html](https://rawgit.com/SellaRafaeli/jabjs/master/index.html)
 
 Current version is 0.0.1. For further details contact sella.rafaeli@gmail.com. 
+
+## Backlog
+
+* JSON binding
+* flow-control bindings (repeater)
+* page for performance
+* docs
+* Modulify

@@ -3,6 +3,10 @@ body {
     font-family: Georgia, Trebuchet MS, Helvetica, sans-serif !important;
 }
 
+:disabled {
+    background: #dddddd;
+}
+
 textarea { 
     vertical-align: bottom;
 }

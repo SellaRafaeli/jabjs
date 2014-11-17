@@ -50,11 +50,14 @@ function modifyElems(domElems, newValue, opts) {
 
 function getModifyingFunc(opts) {
     var opts = opts || {};    
+    if (typeof opts == 'string') opts = {func: opts}; //treat input of 'foo' as {func: 'foo'}
+
     if (opts.func) {
         if ((opts.func.constructor) == Function) return opts.func; 
         switch(opts.func) {
             case 'show': return show;
             case 'bgcolor': return bgcolor;                                
+            case 'disable': return disable;                                
         }
     }
 
@@ -74,13 +77,18 @@ function click(elem, value) {
     elem.addEventListener('click', value);
 }
 
-/* JabJS logic */
-function markBindings(obj, property, domElems, opts) {
-    obj.bindings = obj.bindings || {};
-    obj.bindings[property] = {elems: domElems, opts: opts};         
+function disable(elem, value) {
+    value ? elem.disabled = true : elem.disabled = false;
 }
 
-function bindModelToElem(obj, property, domElems, opts) {
+/* JabJS logic */
+function markBindings(obj, property, domElems, opts) {
+    var opts = opts || {};
+    obj.bindings = obj.bindings || {};
+    obj.bindings[property] = {elems: domElems, func: opts.func, opts: opts};         
+}
+
+function bindModelToElem(obj, property, domElems, opts) {    
     var domElems = toArray(domElems);
     var currentValue = obj[property] || '';     
 
