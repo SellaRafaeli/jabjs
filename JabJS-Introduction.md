@@ -46,6 +46,14 @@ jab.bind(user, 'name', [document.getElementById('input'), document.getElementByI
 
 Now #input, #textarea, #div and user.name are all bounded to each other. 
 
+#### Select, Checkbox
+Usage is as follows (assuming a `select` and `checkbox` elements with those Ids):
+```js
+user = {selectIndex=0; checked=false};
+jab.bind(user, 'selectIndex', document.getElementById('select'));
+jab.bind(user, 'checked', document.getElementById('checkbox'));
+```
+
 #### Special Bindings
 By default, JabJS binds by value. In our examples, `user.name`'s value is input as the element's appropriate value. These are binded by using the following syntax (note the new fourth parameter):
 
