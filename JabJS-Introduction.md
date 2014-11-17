@@ -3,7 +3,7 @@ JabJS - Introduction
 
 **JabJS** allows you to bind any JavaScript model to any DOM element using the following idiomatic format:
 
-**jab.bind(model, propertyNameAsString, domElement[s]ToBindTo, [optsHash])**
+***jab.bind(model, property, domElement[s])***
 
 Example:
 ```js
