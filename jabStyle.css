@@ -12,11 +12,14 @@ select, input, textarea {
     padding: 5px;
 }
 
-input, textarea {
+#input, #textarea {
     border: 1px solid lime;
     outline: none;
     resize: none;
+    vertical-align: bottom
 }
+
+
 
 input[type=checkbox] {  
   transform: scale(1.5); /* All browsers except webkit*/  
@@ -43,28 +46,34 @@ select {
 }
 
 #instructions { 
-    font-size: 20px;
-    text-align: center;
+    font-size: 18px;
+    text-align: left;
     display: block;
-    width: 45%;
+    width: 80%;
     background-color: transparent;
     color: black;
     margin-left: auto;
     margin-right: auto; 
 }
 
+
 #instructionsTitle { 
     display: block;
     background: transparent;
     color: black;
     font-weight: bold;
-    margin: 10px;
+    margin: 10px;    
 }
 
 #footer {
     font-size: 14px;
     display: block;
     margin-top: 100px;
+    margin-left: 20px;
 }
 
 .purple { color: purple;}
+.brown { color: brown;}
+
+li { margin: 10px;}
+ol pre { display: inline; }

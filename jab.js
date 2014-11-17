@@ -69,10 +69,4 @@ function bindModelToElem(obj, property, domElems) {
     return obj;
 }
 
-function bindObjPropToElements(obj, property, domElems) {    
-    bindModelToElem(obj, property, domElems);
-}
-
-function jab(obj, property, domElems) {
-    bindObjPropToElements(obj, property, domElems);
-}
+jab = bimv = bindModelView = bindModelToView = bindObjPropToElements = bindModelToElem;

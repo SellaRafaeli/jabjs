@@ -10,7 +10,7 @@
 
 <div id="div">#div</div>
 
-<p id="p">#p.</p>
+<p id="p">#p</p>
 
 <select id="select">
   <option value="select-opt-1">#select (Option 1)</option>  
@@ -24,13 +24,14 @@
 <label><input type="checkbox" id="checkbox" value="value">#Checkbox</label>
 
 <div id="instructions">
-    <div id='instructionsTitle'> JabJS data-binding: </div>
+    <div id='instructionsTitle'> Usage: </div>
     <ol>
-        <li> <pre> user = {name: 'Ron Swanson'}; </pre> </li>
-        <li> <pre> jab(user, 'name', document.getElementById('input')); </pre> </li>        
-        <li> <pre> user.name = 'Bruce Wayne' <span class='purple'>//sweet!</span> </pre> </li>        
+        <li> <pre> user = {<span class="purple">name</span>: <span class="brown">'Ron Swanson'</span>}; //use any model object</pre> </li>
+        <!-- <li> <pre> bindModelToView(user, <span class="purple">'name'</span>, document.getElementById('input')); //bind model to view</pre> </li>         -->
+        <li> <pre> jab.bindModelToView(user, <span class="purple">'name'</span>, document.getElementById('input')); //bind model to view</pre> </li>        
+        <!-- <li> <pre> user.name = 'Bruce Wayne' <span class='purple'>//sweet!</span> </pre> </li>         -->
     </ol>
-    <span id='footer'>Try it yourself on this page, or read the <a href="https://github.com/sellarafaeli/jabjs"> docs &  source code </a>. &#169; sellarafaeli 2014. </span>
+    <span id='footer'>Cool. Try it yourself on this page, then go read the <a href="https://github.com/sellarafaeli/jabjs"> docs &  source code </a>. &#169; sellarafaeli 2014. </span>
 </div>
 
 </body>
