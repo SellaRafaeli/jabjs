@@ -105,4 +105,5 @@ function bindModelToElem(obj, property, domElems, opts) {
     return obj;
 }
 
-jab = bimv = bindModelView = bindModelToView = bindObjPropToElements = bindModelToElem;
+bimv = bindModelView = bindModelToView = bindObjPropToElements = bindModelToElem;
+jab = {bind: bimv};
