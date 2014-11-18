@@ -163,7 +163,7 @@ jab.bind(man, 'fullName', div); //...and so will its binded view.
 * Orthogonal to other JS libraries - use it anywhere, with any other library or templating, without depending or modifying anything else. 
 
 #### Etymology
-A *jab* is a [type of punch](http://en.wikipedia.org/wiki/Jab) used in the martial arts.
+A **jab** is a [type of punch](http://en.wikipedia.org/wiki/Jab) used in the martial arts.
 
 #### Contact
 * Source code is on [GitHub](https://github.com/SellaRafaeli/jabjs/).
