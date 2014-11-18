@@ -1,5 +1,6 @@
 /* helpers */
 function toArray(itemOrArray) {
+    itemOrArray = itemOrArray || [];
     var arrayified = ((itemOrArray).constructor === Array) ? itemOrArray : [itemOrArray];
     return arrayified;
 }
@@ -41,6 +42,7 @@ function syncDomElemsOnChange(obj, property, domElems) {
 }
 
 function modifyElems(domElems, newValue, opts) {
+    if (domElems.length==0) { console.log("noop"); return; }
     var modifyingFunc = getModifyingFunc(opts)
 
     domElems.forEach(function(domElem) { 
@@ -84,26 +86,63 @@ function disable(elem, value) {
 /* JabJS logic */
 function markBindings(obj, property, domElems, opts) {
     var opts = opts || {};
-    obj.bindings = obj.bindings || {};
-    obj.bindings[property] = {elems: domElems, func: opts.func, opts: opts};         
+    obj.jab = obj.jab || {};
+    obj.jab.bindings = obj.bindings || {};
+    obj.jab.bindings[property] = {elems: domElems, func: opts.func, opts: opts};         
 }
 
 function bindModelToElem(obj, property, domElems, opts) {    
     var domElems = toArray(domElems);
     var currentValue = obj[property] || '';     
+    var opts = opts || {};
 
     Object.defineProperty(obj, property, {
-        get: function() { return getDomValue(domElems[0]); }, 
-        set: function(newValue) { modifyElems(domElems, newValue, opts); },            
+        get: function() { return getDomValue(domElems[0]); }, //necessary in case DOM elem is externally modified
+        set: function(newValue) { 
+            modifyElems(domElems, newValue, opts); 
+            if (opts.afterHook)(opts.afterHook)(newValue);
+         },            
         configurable: true
     });
 
-    if (domElems.length > 1) { syncDomElemsOnChange(obj, property, domElems); }               
+    syncDomElemsOnChange(obj, property, domElems);
 
     markBindings(obj, property, domElems, opts);    
     obj[property] = currentValue; //force assignment to trigger binding with the initial data
     return obj;
 }
 
+function bindVarCore(obj, property, cb) {
+    var val = obj[property];
+    Object.defineProperty(obj, property, {       
+        get: function() { return val; },
+        set: function(newValue){ val = newValue; cb(newValue); },            
+        configurable: true
+    });    
+
+    obj[property] = obj[property]; //force to trigger binding
+}
+
+function bindVar(obj, propsList, cb) {
+    var propsList = toArray(propsList);
+    propsList.forEach(function(property) { bindVarCore(obj, property, cb) });
+}
+
+
 bimv = bindModelView = bindModelToView = bindObjPropToElements = bindModelToElem;
-jab = {bind: bimv};
+jab = {bind: bimv, bindVar: bindVar};
+input = document.getElementById(('input'))
+p = document.getElementById(('p'))
+
+user = {firstName: 'Bill', lastName: 'Clinton', fullName: ''};
+jab.bind(user, 'fullName', div);
+jab.bindVar(user, ['firstName', 'lastName'], function() { user.fullName = user.firstName + " " +user.lastName } );
+
+girl = {name: "Queen", lastName: "Latifa"};
+setGirlsFullName = function(){ girl.fullName = girl.name + girl.lastName };
+jab.bind(girl, 'name', input, {afterHook: setGirlsFullName} );
+jab.bind(girl, 'lastName', textarea, {afterHook: setGirlsFullName});
+jab.bind(girl,'fullName',p);
+
+//jab.bindVar(user, 'lastName', function() { user.fullName = user.firstName + " " +user.lastName } );
+console.log("done");
