@@ -119,6 +119,21 @@ You can jab.bind it by using the idiomatic syntax on whatever sub-object you wis
 jab.bind(user.details, 'name', document.getElementById('input'));
 ```
 
+#### After-Hooks (reacting to changes in binded elements)
+Sometimes binding your elements to the view is not enough - you want to perform some additional actions whenever they change. This is often referred to as [reactive programming](http://en.wikipedia.org/wiki/Reactive_programming). For example, consider two input elements binded each to its model, and a third element reflecting some computation on the values of the first two. (Say, an input for speed and an input for time, and a third <p> element to display distance covered.)
+
+After-hooks are used by JabJS by supplying an `afterHook` callback function to the `opts` parameter. This callback function is called whenever the element is updated. For example:
+
+```js
+car = {speed: "10", time: "3"};
+computeDistance = function(){ car.distance = car.speed * car.time; };
+jab.bind(car, 'speed', document.getElementById('input'), {afterHook: computeDistance} ); //#input.value == 10
+jab.bind(car, 'time', document.getElementById('textarea'), {afterHook: computeDistance}); //#textarea.value == 3
+jab.bind(car, 'distance', document.getElementById('p')); //#p.innerHTML == 30
+//now, changing the speed or time via the input elements or JS models will also update #p and distance.
+car.speed = 20 //#input.value == 20, textarea.value == 3, #p.value == 60
+```
+
 #### Technical Points
 * Stand-alone & dependency-free, simply include and run.
 * Tiny: ~1.5K compressed. 
