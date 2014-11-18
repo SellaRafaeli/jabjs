@@ -1,16 +1,17 @@
-/* helpers */
-function toArray(itemOrArray) {
-    itemOrArray = itemOrArray || [];
-    var arrayified = ((itemOrArray).constructor === Array) ? itemOrArray : [itemOrArray];
-    return arrayified;
-}
+(function(){ 
+    /* helpers */
+    function toArray(itemOrArray) {
+        itemOrArray = itemOrArray || [];
+        var arrayified = ((itemOrArray).constructor === Array) ? itemOrArray : [itemOrArray];
+        return arrayified;
+    }
 
-function addListenerMulti(element, eventsString, func) { 
-    var events = eventsString.split(' ');
-    events.forEach(function(event) { element.addEventListener(event, func, false);  });    
-}
+    function addListenerMulti(element, eventsString, func) { 
+        var events = eventsString.split(' ');
+        events.forEach(function(event) { element.addEventListener(event, func, false);  });    
+    }
 
-/* DOM manipulation */
+    /* DOM manipulation */
 //return the property to access DOM element's value - 'value', 'innerHTML', 'selectedIndex', etc. 
 function getDomValueProp(elem) { 
 
@@ -19,39 +20,39 @@ function getDomValueProp(elem) {
     if (elem.nodeName == 'TEXTAREA') return 'value'; 
     if (elem.nodeName == 'SELECT') return 'selectedIndex'; 
 
-    return 'innerHTML'; //default
+        return 'innerHTML'; //default
 }
 
-function getDomValue(elem) {
-    var propName = getDomValueProp(elem);
-    return elem[propName];
-}
+    function getDomValue(elem) {
+        var propName = getDomValueProp(elem);
+        return elem[propName];
+    }
 
-function setDomValue(elem, newValue) {
-    var propName = getDomValueProp(elem);
-    elem[propName] = newValue;
-}
+    function setDomValue(elem, newValue) {
+        var propName = getDomValueProp(elem);
+        elem[propName] = newValue;
+    }
 
-function syncDomElemsOnChange(obj, property, domElems) {        
-    var events = 'change keyup';
-    domElems.forEach(function(elem) { 
-        addListenerMulti(elem, events, function(e) {
-            obj[property] = getDomValue(e.srcElement);             
-        }); 
-    });        
-}
+    function syncDomElemsOnChange(obj, property, domElems) {        
+        var events = 'change keyup';
+        domElems.forEach(function(elem) { 
+            addListenerMulti(elem, events, function(e) {
+                obj[property] = getDomValue(e.srcElement);             
+            }); 
+        });        
+    }
 
-function modifyElems(domElems, newValue, opts) {
-    if (domElems.length==0) { console.log("noop"); return; }
-    var modifyingFunc = getModifyingFunc(opts)
+    function modifyElems(domElems, newValue, opts) {
+        if (domElems.length==0) { console.log("noop"); return; }
+        var modifyingFunc = getModifyingFunc(opts)
 
-    domElems.forEach(function(domElem) { 
-        modifyingFunc(domElem, newValue);
-    });
-}
+        domElems.forEach(function(domElem) { 
+            modifyingFunc(domElem, newValue);
+        });
+    }
 
-function getModifyingFunc(opts) {
-    var opts = opts || {};    
+    function getModifyingFunc(opts) {
+        var opts = opts || {};    
     if (typeof opts == 'string') opts = {func: opts}; //treat input of 'foo' as {func: 'foo'}
 
     if (opts.func) {
@@ -100,8 +101,8 @@ function bindModelToElem(obj, property, domElems, opts) {
         get: function() { return getDomValue(domElems[0]); }, //necessary in case DOM elem is externally modified
         set: function(newValue) { 
             modifyElems(domElems, newValue, opts); 
-            if (opts.afterHook)(opts.afterHook)(newValue);
-         },            
+            if (opts.afterHook)(opts.afterHook)(newValue); //opts.afterHook is a function. If present, it executes on 'newValue'. 
+        },            
         configurable: true
     });
 
@@ -128,21 +129,7 @@ function bindVar(obj, propsList, cb) {
     propsList.forEach(function(property) { bindVarCore(obj, property, cb) });
 }
 
+window.jab = {bind: bindModelToElem, bindVar: bindVar};
+console.log("loaded JabJS");
+}());
 
-bimv = bindModelView = bindModelToView = bindObjPropToElements = bindModelToElem;
-jab = {bind: bimv, bindVar: bindVar};
-input = document.getElementById(('input'))
-p = document.getElementById(('p'))
-
-user = {firstName: 'Bill', lastName: 'Clinton', fullName: ''};
-jab.bind(user, 'fullName', div);
-jab.bindVar(user, ['firstName', 'lastName'], function() { user.fullName = user.firstName + " " +user.lastName } );
-
-girl = {name: "Queen", lastName: "Latifa"};
-setGirlsFullName = function(){ girl.fullName = girl.name + girl.lastName };
-jab.bind(girl, 'name', input, {afterHook: setGirlsFullName} );
-jab.bind(girl, 'lastName', textarea, {afterHook: setGirlsFullName});
-jab.bind(girl,'fullName',p);
-
-//jab.bindVar(user, 'lastName', function() { user.fullName = user.firstName + " " +user.lastName } );
-console.log("done");
