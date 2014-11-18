@@ -122,7 +122,7 @@ jab.bind(user.details, 'name', document.getElementById('input'));
 #### After-Hooks (reacting to changes in binded elements)
 Sometimes binding your elements to the view is not enough - you want to perform some additional actions whenever they change. This is often referred to as [reactive programming](http://en.wikipedia.org/wiki/Reactive_programming). For example, consider two input elements binded each to its model, and a third element reflecting some computation on the values of the first two. (Say, an input for speed and an input for time, and a third <p> element to display distance covered.)
 
-After-hooks are used by JabJS by supplying an `afterHook` callback function to the `opts` parameter. This callback function is called whenever the element is updated. For example:
+After-hooks are used by JabJS by supplying an `afterHook` callback function to the `opts` parameter. This callback function is called whenever the element is updated. The function is given the element's new value, but that's often not needed. For example:
 
 ```js
 car = {speed: "10", time: "3"};
@@ -132,6 +132,18 @@ jab.bind(car, 'time', document.getElementById('textarea'), {afterHook: computeDi
 jab.bind(car, 'distance', document.getElementById('p')); //#p.innerHTML == 30
 //now, changing the speed or time via the input elements or JS models will also update #p and distance.
 car.speed = 20 //#input.value == 20, textarea.value == 3, #p.value == 60
+```
+
+#### Binding to JavaScript variables - Pure Reactive JavaScript
+
+JabJS also enables you to performing binding on pure JavaScript objects, with no DOM elements. This can be used to hold computed variables of a user (composed of other variables). Along with DOM bindings, this can be utilized to bind computed, reactive properties to the DOM itself. 
+
+Binding pure JS vars is done with the following syntax: `jab.bindVar(model, property/ies, callback)`. For example:
+
+```js
+man = {firstName: 'Bill', lastName: 'Clinton', fullName: ''};
+jab.bindVar(man, ['firstName', 'lastName'], function() { man.fullName = man.firstName + " " +man.lastName } ); //whenever firstName or lastName change, fullName will also change...
+jab.bind(man, 'fullName', div); //...and so will its binded view. 
 ```
 
 #### Technical Points
