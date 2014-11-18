@@ -167,5 +167,5 @@ A **jab** is a [type of punch](http://en.wikipedia.org/wiki/Jab) used in the mar
 
 #### Contact
 * Source code is on [GitHub](https://github.com/SellaRafaeli/jabjs/).
-* Demo page which works with all the examples in this tutorial is [here](/jabjs/index.html).
+* Demo page which works with all the examples in this tutorial is [here](http://www.sellarafaeli.com/jabjs-demo/index.html).
 * For any questions, help or pull requests please contact sella.rafaeli@gmail.com. 
