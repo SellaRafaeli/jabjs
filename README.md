@@ -1,7 +1,7 @@
 <!-- {"created_at": "2014-11-19"} -->
 
-JabJS - Introduction
-====================
+JabJS - Super-Simple Data-Binding
+=================================
 
 **JabJS** allows you to bind any JavaScript model to any DOM element using the following idiomatic format:
 
