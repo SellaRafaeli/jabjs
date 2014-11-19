@@ -3,7 +3,7 @@
 JabJS - Super-Simple Data-Binding
 =================================
 
-**JabJS** allows you to bind any JavaScript model to any DOM element using the following idiomatic format:
+**JabJS** allows you to bind any JavaScript model to any DOM element:
 
 ```js
 jab.bind(model, 'property', domElement[s]);
@@ -15,6 +15,8 @@ Example:
 user = {name: 'John Lennon'}; //any JavaScript object
 jab.bind(user, 'name', document.getElementByid('input')); //user is now binded (two-way) with #input
 ```
+
+That's it. Include the jab.js script and start binding. 
 
 #### Demo Page
 This tutorial is accompanied by [the JabJS demo page](http://www.sellarafaeli.com/jabjs-demo/index.html), which includes some HTML and the JabJS library. Every example given in this document can (and should) be executed on that page via the JavaScript console, to demonstrate JabJS usage.  
