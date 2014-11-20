@@ -16,7 +16,7 @@
     }
 
     function toDomElems(selectorOrElem) {
-        if isString(selectorOrElem) return document.querySelectorAll(selectorOrElem);
+        if (isString(selectorOrElem)) return Array.prototype.slice.call(document.querySelectorAll(selectorOrElem));
         return selectorOrElem;
     }
 
@@ -62,7 +62,7 @@ function getDomValueProp(elem) {
 
     function getModifyingFunc(opts) {
         var opts = opts || {};    
-    if isString(opts) opts = {func: opts}; //treat input of 'foo' as {func: 'foo'}
+    if (isString(opts)) opts = {func: opts}; //treat input of 'foo' as {func: 'foo'}
 
     if (opts.func) {
         if ((opts.func.constructor) == Function) return opts.func; 
