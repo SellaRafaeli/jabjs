@@ -1,5 +1,9 @@
-(function(){ 
+(function(){     
     /* helpers */
+    function isString(s) {
+        return (typeof s == 'string');
+    }
+
     function toArray(itemOrArray) {
         itemOrArray = itemOrArray || [];
         var arrayified = ((itemOrArray).constructor === Array) ? itemOrArray : [itemOrArray];
@@ -9,6 +13,11 @@
     function addListenerMulti(element, eventsString, func) { 
         var events = eventsString.split(' ');
         events.forEach(function(event) { element.addEventListener(event, func, false);  });    
+    }
+
+    function toDomElems(selectorOrElem) {
+        if isString(selectorOrElem) return document.querySelectorAll(selectorOrElem);
+        return selectorOrElem;
     }
 
     /* DOM manipulation */
@@ -53,7 +62,7 @@ function getDomValueProp(elem) {
 
     function getModifyingFunc(opts) {
         var opts = opts || {};    
-    if (typeof opts == 'string') opts = {func: opts}; //treat input of 'foo' as {func: 'foo'}
+    if isString(opts) opts = {func: opts}; //treat input of 'foo' as {func: 'foo'}
 
     if (opts.func) {
         if ((opts.func.constructor) == Function) return opts.func; 
@@ -93,7 +102,7 @@ function markBindings(obj, property, domElems, opts) {
 }
 
 function bindModelToElem(obj, property, domElems, opts) {    
-    var domElems = toArray(domElems);
+    var domElems = toDomElems(domElems); //ensure DOM elems
     var currentValue = obj[property] || '';     
     var opts = opts || {};
 

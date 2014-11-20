@@ -1,42 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>JabJS - Super-Simple Data-Binding</title>
-<link rel="stylesheet" type="text/css" href="jabStyle.css">
-</head>
-</head>
-<body>
-<h1>JabJS - Super-Simple Data-Binding</h1>
+body { 
+    text-align: center;
+    font-family: Georgia, Trebuchet MS, Helvetica, sans-serif !important;
+}
 
-<div id="div">#div</div>
+:disabled {
+    background: #dddddd;
+}
 
-<p id="p">#p</p>
+textarea { 
+    vertical-align: bottom;
+}
 
-<select id="select">
-  <option value="select-opt-1">#select (Option 1)</option>  
-  <option value="select-opt-2">#select (Option 2)</option>
-</select>
+select, input, textarea {     
+    font-size: 15px;
+    padding: 5px;
+}
 
-<input id="input" placeholder="#input">
+#input, #textarea {
+    border: 1px solid lime;
+    outline: none;
+    resize: none;
+    vertical-align: bottom
+}
 
-<textarea id="textarea" placeholder="#textarea"></textarea>
 
-<label><input type="checkbox" id="checkbox" value="value">#Checkbox</label>
 
-<div id="instructions">
-    <div id='instructionsTitle'> Usage: </div>
-    <ol>
-        <li> <pre> user = {<span class="purple">name</span>: <span class="brown">'Ron Swanson'</span>}; //use any model object</pre> </li>        
-        <li> <pre> jab.bind(user, <span class="purple">'name'</span>, document.getElementById('input')); //bind model to view</pre> </li>                
-    </ol>
-    <span id='footer'>Cool. Try it yourself on this page with your browser's JS console, then go read the <a href="http://sellarafaeli.com/blog/jabjs-introduction.html"> docs </a> & <a href="https://github.com/SellaRafaeli/jabjs"> source code </a>. &#169; sellarafaeli 2014. </span>
-</div>
+input[type=checkbox] {  
+  transform: scale(1.5); /* All browsers except webkit*/  
+  -webkit-transform: scale(1.5); /* Webkit browsers*/
+  margin-right: 8px;
+}
 
-</body>
+div, p {
+    background-color: #f90;
+    color: white;
+    display: inline;
+    padding: 8px;
+}
 
-<script text="text/javascript" src="jab.js"></script>
-<script>
-    // user = {name: 'Joe'}
-    // bindModelToView(user, 'name', [document.getElementById('input'), document.getElementById('textarea')]);
-</script>
-</html>
+select {
+   background-color: #777;
+   color: white;
+   width: 268px;
+   padding: 5px;
+   font-size: 16px;
+   line-height: 1;   
+   border-radius: 0;
+   height: 34px;
+}
+
+#instructions { 
+    font-size: 18px;
+    text-align: left;
+    display: block;
+    width: 80%;
+    background-color: transparent;
+    color: black;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+
+#instructionsTitle { 
+    display: block;
+    background: transparent;
+    color: black;
+    font-weight: bold;
+    margin: 10px;    
+}
+
+#footer {
+    font-size: 14px;
+    display: block;
+    margin-top: 100px;
+    margin-left: 20px;
+}
+
+.purple { color: purple;}
+.brown { color: brown;}
+
+li { margin: 10px;}
+ol pre { display: inline; }
