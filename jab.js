@@ -102,7 +102,8 @@ function markBindings(obj, property, domElems, opts) {
 }
 
 function bindModelToElem(obj, property, domElems, opts) {    
-    var domElems = toDomElems(domElems); //ensure DOM elems
+//    var domElems = toDomElems(domElems); //ensure DOM elems
+var domElems = toArray(domElems); //ensure DOM elems
     var currentValue = obj[property] || '';     
     var opts = opts || {};
 

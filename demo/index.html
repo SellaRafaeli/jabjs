@@ -12,6 +12,11 @@
 
 <p id="p">#p</p>
 
+<ul id="ul" style="text-align:left">
+    <li class="li">List item 1</li>
+    <li>List item 2</li>    
+</ul>
+
 <select id="select">
   <option value="select-opt-1">#select (Option 1)</option>  
   <option value="select-opt-2">#select (Option 2)</option>
@@ -37,6 +42,9 @@
 <script text="text/javascript" src="../jab.js"></script>
 <script>
     user = {name: 'Joe'};
-    jab.bind(user, 'name', 'input');
+    jab.bind(user, 'name', document.getElementById('input'));
+    arr = [10,20,30]
+    elem = ul
+
 </script>
 </html>
