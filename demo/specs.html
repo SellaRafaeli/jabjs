@@ -5,7 +5,8 @@
 <script text="text/javascript" src="../jab.js"></script>
 <style>
 .pass { border: 3px solid green; padding: 5px;}
-.res { border: 3px solid red; padding: 5px;}
+/*.res { border: 3px solid red; padding: 5px;}*/
+.res { border: 1px dotted blue; padding: 5px;}
 </style>
 </head>
 
@@ -19,7 +20,7 @@
 // bind property to selector - DONE
 
 // bind with special binding (show, bgcolor, clickhandler) - DONE
-// bind with custom binding - 
+// bind with custom bindings - DONE
 
 // bind sub-element 
 // afterhooks, interactive menus
@@ -68,27 +69,29 @@ function setVal(selector, val) {
 <ol>
     <li>
         <h4> Bind Property To Element </h4>            
-        <span class="res" id="adam"></span> <span> should show "adam2"</span>
+        <span class="res" id="adam"></span> <span>view should show "adam2"</span>
         
          <script class="script">
             adam = {name: 'adam'}; 
             jab.bind(adam, 'name', '#adam');
             adam.name = "adam2";
             
-            assertElem('adam', 'adam2');
+            //assertElem('adam', 'adam2');
         </script>                    
     </li>
 
     <li>
         <h4> Bind Property To Element, Two Way </h4>            
-        <input class="res" id="bob"> <span class="res" id="bobModel"></span> <span> Both should show "bob2"</span>
+        <input class="res" id="bob">
+        <!--  <span class="res" id="bobModel"></span>  -->
+        <span> view & model should show "bob2" (synced)</span>
          <script class="script">
             bob = {name: 'bob'}; 
             jab.bind(bob, 'name', '#bob');            
             setVal("#bob", 'bob2');
             
-            assertElem('#bob', 'bob2');
-            assertModel(bob.name, 'bob2', '#bobModel');
+            //assertElem('#bob', 'bob2');
+            //assertModel(bob.name, 'bob2', '#bobModel');
         </script>                    
     </li>
     
@@ -96,8 +99,8 @@ function setVal(selector, val) {
         <h4> Bind Property To Element, Three Way </h4>            
         <input class="res" id="carol2">
         <textarea class="res" id="carol3"></textarea>
-         <span class="res" id="carolModel"></span> 
-         <span> All three should show carol3 </span>
+         <!-- <span class="res" id="carolModel"></span>  -->
+         <span> View &  two models should show carol3 (synced) </span>
          <script class="script">
             carol = {name: 'carol'};
             carolElems = [get('carol2'), get('carol3')]; 
@@ -106,9 +109,9 @@ function setVal(selector, val) {
             setVal('#carol2', 'carol2');
             setVal('#carol3', 'carol3');
             
-            assertElem('#carol2', 'carol3');
-            assertElem('#carol3', 'carol3');
-            assertModel(carol.name, 'carol3', '#carolModel');
+            //assertElem('#carol2', 'carol3');
+            //assertElem('#carol3', 'carol3');
+            //assertModel(carol.name, 'carol3', '#carolModel');
         </script>                    
     </li>    
 
@@ -127,18 +130,19 @@ function setVal(selector, val) {
     </li>    
 
     <li>
-        <h4> Bind Property To Selector </h4>            
+        <h4> Bind Property To Elem using CSS Selector </h4>            
+        <div class="evan"></div>
         <div class="evan"></div>
         
          <script class="script">
-            evan = {name: 'evan'};            
-            jab.bind(evan, 'name', ".evan");                        
+            evan = {name: 'evan - selected by class'};            
+            jab.bind(evan, 'name', ".evan"); //notice selection with CSS class selector
         </script>                    
     </li>    
 
     <li>
         <h4> Special Bindings (Not 'sync values') </h4>            
-        <div id="fatima">Am I visible?</div>
+        <div id="fatima">Am I visible? Do I respond to clicks?</div>
         
          <script class="script">
             fatima = {shouldShow: 'true', backgroundColor: 'lightgreen', clickHandler: function(){ alert(101); } };            
@@ -149,16 +153,20 @@ function setVal(selector, val) {
     </li>
 
     <li>
-        <h4> Special Bindings (Not 'sync values') </h4>            
-        <div id="fatima">Am I visible?</div>
+        <h4> Custom Bindings </h4>            
+        <div id="homer" style='border: 1px solid green;'>Homer</div>
         
          <script class="script">
-            fatima = {shouldShow: 'true', backgroundColor: 'lightgreen', clickHandler: function(){ alert(101); } };            
-            jab.bind(fatima, 'shouldShow', "#fatima", 'show');                        
-            jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                        
-            jab.bind(fatima, 'clickHandler', "#fatima", {func: 'click'});                        
+             setBorderWidth = function(elem, value) {                
+                elem.style.borderWidth = value+'px';
+            };
+
+            borderData = {width: 20};
+            jab.bind(borderData, 'width', get('#homer'), {func: setBorderWidth});
+            borderData.width = 10;
         </script>                    
     </li>
+    
 
 </ol>
 </body>
