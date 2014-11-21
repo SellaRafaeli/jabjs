@@ -1,14 +1,21 @@
-(function(){     
+
+
+//(function(){     
     /* helpers */
     function isString(s) {
         return (typeof s == 'string');
     }
 
-    function toArray(itemOrArray) {
+    function toArray(itemOrArray) { //
         itemOrArray = itemOrArray || [];
-        var arrayified = ((itemOrArray).constructor === Array) ? itemOrArray : [itemOrArray];
-        return arrayified;
+        if (itemOrArray.constructor === Array) return itemOrArray;
+        if (itemOrArray.constructor === HTMLCollection) return Array.prototype.slice.call(itemOrArray);
+        if (itemOrArray.constructor === NodeList) return Array.prototype.slice.call(itemOrArray);
+        
+        return [itemOrArray];        
     }
+
+    var toArr = toArray;
 
     function addListenerMulti(element, eventsString, func) { 
         var events = eventsString.split(' ');
@@ -16,8 +23,12 @@
     }
 
     function toDomElems(selectorOrElem) {
-        if (isString(selectorOrElem)) return Array.prototype.slice.call(document.querySelectorAll(selectorOrElem));
+        if (isString(selectorOrElem)) return toArray(document.querySelectorAll(selectorOrElem));
         return selectorOrElem;
+    }
+
+    function descendants(elem) { 
+        return toArr(elem.querySelectorAll("*")); 
     }
 
     /* DOM manipulation */
@@ -29,7 +40,7 @@ function getDomValueProp(elem) {
     if (elem.nodeName == 'TEXTAREA') return 'value'; 
     if (elem.nodeName == 'SELECT') return 'selectedIndex'; 
 
-        return 'innerHTML'; //default
+        return 'textContent'; //default
 }
 
     function getDomValue(elem) {
@@ -140,7 +151,49 @@ function bindVar(obj, propsList, cb) {
     propsList.forEach(function(property) { bindVarCore(obj, property, cb) });
 }
 
-window.jab = {bind: bindModelToElem, bindVar: bindVar};
-console.log("loaded JabJS");
-}());
+//bind all properties of all descendants of one element, by 'name' (or other) attribute)
+function bindObj(obj, elem, domAttr) {
+    var domAttr = domAttr || 'name';
+    var elems = descendants(elem); 
+    if (!elems.length) { 
+        elems = [elem];
+     }//if no children, bind to himself.        
 
+    elems.forEach(function (elem) {
+        objProperty = elem.getAttribute(domAttr);
+        if (obj[objProperty]) bindModelToElem(obj, property, elem);        
+    });
+
+    return obj;
+}
+
+
+window.jab = {bind: bindModelToElem, bindVar: bindVar, bindObj: bindObj};
+console.log("loaded JabJS");
+//}());
+
+transport = {car: 'my car', bus: 'my bus2', boat: 'my boat3', inputName: 'zomba2'};
+//bindNames(transport, div2);
+// function loopNodeChildren(node) {
+//     var children = toArray(node.children);    
+//     children.forEach(function (child) { 
+//         log(child); 
+//         loopNodeChildren(child);
+//     })
+// }
+// log = function(s) {console.log(s);}
+// loopNodeChildren(div2);
+//        var node;
+//     for(var i=0;i<nodes.length;i++)
+//     {
+//         node = nodes[i];
+//         if(output)
+//         {
+//             outputNode(node);
+//         }
+//         if(node.childNodes)
+//         {
+//             recurseDomChildren(node, output);
+//         }
+//     }
+// }
