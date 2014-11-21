@@ -17,6 +17,11 @@
 
 // bind array of objects to element (repeater *within container - you must have container*)
 // bind array to repeater (with custom dom attr to signify obj's keys)
+// bind array as nested field, update in place
+// bind array as nested field, replace completely 
+// bind array - set new item using "set" 
+
+// bind object, including array as nested field
 
 
 
@@ -151,12 +156,14 @@ function bindModelToElem(obj, property, domElems, opts) {
 
     if (isArray(obj[property])) {
         var _arr = obj[property];
+        var originalDOMNode = domElems[0];
+             originalDOMNode.originalParent = originalDOMNode.parentElement;
         Object.defineProperty(obj, property, {
             get: function() { 
                 return _arr; },
             set: function(newValue) { 
                 _arr = newValue; 
-                bindArr(_arr, domElems[0]); 
+                bindArr(_arr, originalDOMNode);                 
                 return _arr; }
         });
         
@@ -198,7 +205,9 @@ function bindVar(obj, propsList, cb) {
 }
 
 //bind all properties of all descendants of one element, by 'name' (or other) attribute)
-function bindObj(obj, elem, domAttrForObjKey) {
+function bindObj(obj, elemOrSelector, domAttrForObjKey) {
+    var elem = toArray(toDomElems(elemOrSelector))[0];
+
     var domAttr = domAttrForObjKey || 'name'; //this attr holds the key for the obj's prop to bind with. 
     var elems = descendants(elem); 
     if (!elems.length) { 

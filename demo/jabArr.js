@@ -23,7 +23,8 @@
 //ul.innerHTML = ''; 
 
 function clearElem(node) { //clears elem's contents. (like .innerHTML = '');
-    while (node.firstChild) { node.removeChild(node.firstChild); }
+    node.innerHTML = '';
+    //while (node.firstChild) { node.removeChild(node.firstChild); }
 }
 
 var arrayChangingFuncs = [ "pop", "push", "reverse", "shift", "unshift", "splice", "sort", "filter"];
@@ -43,18 +44,21 @@ function setArrOnChangesCB(arr, cb) {
 }
 
 function bindArr(arr, elem, domAttr) {        
-    orig = elem;
-    papa = elem.parentNode;
+    var orig = elem;
+    var papa = elem.originalParent;
     //whenever array changes, we want to...
-    repeatElementByArr = function(newArr) {
+    var repeatElementByArr = function(newArr) {
         //debugger
-        clearElem(papa);
+        var origElem = elem;
+        clearElem(papa);        
+        orig.parentElement = papa; //keep this for later
         newArr.forEach( function(item, index) {         
             if (isObj(item)) { //if it's a primitive, it's unclear what/how to bind, since it does not have a father obj. 
-                var newNode = papa.appendChild(orig.cloneNode());        
+                var newNode = papa.appendChild(orig.cloneNode(true));        
                 jab.bindObj(item, newNode, domAttr);
             }
-        })    
+        });
+        orig.parentElement = papa; //keep this for later    
     };    
 
     //when arr changes, repeatElementByArr
@@ -77,4 +81,7 @@ li = document.querySelector('.li');
 //bindArr(arr, li);
 
 cob = {nestedArr: [{b:2},{b:4}] };
-jab.bind(cob,'nestedArr','#nestedUL');
+//jab.bind(cob,'nestedArr','#nestedUL');
+
+zob = {nestedZob: [{c:5}, {c:7}], area: "beverly hills"};
+jab.bindObj(zob,'#zob');
