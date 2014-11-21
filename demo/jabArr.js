@@ -74,4 +74,7 @@ function bindArr(arr, elem, domAttr) {
 
 arr = [{a:1}, {a:2}];
 li = document.querySelector('.li');
-bindArr(arr, li);
+//bindArr(arr, li);
+
+cob = {nestedArr: [{b:2},{b:4}] };
+jab.bind(cob,'nestedArr','#nestedUL');

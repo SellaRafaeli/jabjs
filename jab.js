@@ -15,7 +15,7 @@
 // bind object to DOM node, recursively (with 'name' to signify obj's keys)
 // bind object to DOM node, recursively (with custom domAttr to signify obj's keys)
 
-// bind array of objects to element (repeater)
+// bind array of objects to element (repeater *within container - you must have container*)
 // bind array to repeater (with custom dom attr to signify obj's keys)
 
 
@@ -33,9 +33,13 @@
         return (typeof o == 'object');
     }
 
+    function isArray(a) {
+        return a.constructor === Array;
+    }
+
     function toArray(itemOrArray) { //
         itemOrArray = itemOrArray || [];
-        if (itemOrArray.constructor === Array) return itemOrArray;
+        if (isArray(itemOrArray)) return itemOrArray;
         if (itemOrArray.constructor === HTMLCollection) return Array.prototype.slice.call(itemOrArray);
         if (itemOrArray.constructor === NodeList) return Array.prototype.slice.call(itemOrArray);
         
@@ -141,10 +145,26 @@ function markBindings(obj, property, domElems, opts) {
 
 function bindModelToElem(obj, property, domElems, opts) {    
 //    var domElems = toDomElems(domElems); //ensure DOM elems
-    var domElems = toArray(toDomElems(domElems)); //ensure DOM elems array
+    var domElems = toArray(toDomElems(domElems)); //ensure DOM elems array    
     var currentValue = obj[property] || '';     
     var opts = opts || {};
 
+    if (isArray(obj[property])) {
+        var _arr = obj[property];
+        Object.defineProperty(obj, property, {
+            get: function() { 
+                return _arr; },
+            set: function(newValue) { 
+                _arr = newValue; 
+                bindArr(_arr, domElems[0]); 
+                return _arr; }
+        });
+        
+        obj[property] = _arr; //trigger to start        
+        return _arr;
+    }
+    
+    //not array, simple values
     Object.defineProperty(obj, property, {
         get: function() { return getDomValue(domElems[0]); }, //necessary in case DOM elem is externally modified
         set: function(newValue) { 
