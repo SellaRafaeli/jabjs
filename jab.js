@@ -1,9 +1,36 @@
+// bind property to element
+// bind property to element, two way
+// bind property to element, three way
+// bind property to element, select & checkbox
+// bind property to selector 
+// bind property to [array of elements]
+
+// bind with special binding (show, bgcolor, clickhandler) 
+// bind with custom binding
+
+// bind sub-element 
+// afterhooks, interactive menus
+// binding to javascript variables
+
+// bind object to DOM node, recursively (with 'name' to signify obj's keys)
+// bind object to DOM node, recursively (with custom domAttr to signify obj's keys)
+
+// bind array of objects to element (repeater)
+// bind array to repeater (with custom dom attr to signify obj's keys)
+
+
+
+
 
 
 //(function(){     
     /* helpers */
     function isString(s) {
         return (typeof s == 'string');
+    }
+
+    function isObj(o) {
+        return (typeof o == 'object');
     }
 
     function toArray(itemOrArray) { //
@@ -114,8 +141,7 @@ function markBindings(obj, property, domElems, opts) {
 
 function bindModelToElem(obj, property, domElems, opts) {    
 //    var domElems = toDomElems(domElems); //ensure DOM elems
-
-var domElems = toArray(toDomElems(domElems)); //ensure DOM elems array
+    var domElems = toArray(toDomElems(domElems)); //ensure DOM elems array
     var currentValue = obj[property] || '';     
     var opts = opts || {};
 
@@ -152,8 +178,8 @@ function bindVar(obj, propsList, cb) {
 }
 
 //bind all properties of all descendants of one element, by 'name' (or other) attribute)
-function bindObj(obj, elem, domAttr) {
-    var domAttr = domAttr || 'name';
+function bindObj(obj, elem, domAttrForObjKey) {
+    var domAttr = domAttrForObjKey || 'name'; //this attr holds the key for the obj's prop to bind with. 
     var elems = descendants(elem); 
     if (!elems.length) { 
         elems = [elem];
@@ -161,7 +187,7 @@ function bindObj(obj, elem, domAttr) {
 
     elems.forEach(function (elem) {
         objProperty = elem.getAttribute(domAttr);
-        if (obj[objProperty]) bindModelToElem(obj, property, elem);        
+        if (obj[objProperty]) bindModelToElem(obj, objProperty, elem);        
     });
 
     return obj;

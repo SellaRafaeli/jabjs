@@ -29,8 +29,8 @@
 <p id="p">#p</p>
 
 <ul id="ul" style="text-align:left">
-    <li name="one">List item 1</li>
-    <li></li>    
+    <li class='li' name="a">List item 1</li>
+    <li>List item 2</li>    
 </ul>
 
 <select id="select">
@@ -56,11 +56,13 @@
 
 </body>
 <script text="text/javascript" src="../jab.js"></script>
+<script text="text/javascript" src="jabArr.js"></script>
 <script>
     user = {name: 'Joe'};
     jab.bind(user, 'name', document.getElementById('input'));
-    arr = [10,20,30]
-    elem = ul
-
+//    arr = [10,20,30]
+    elem = ul;
+ 
 </script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </html>
