@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JabJS - Super-Simple Data-Binding</title>
+<script text="text/javascript" src="../jab.js"></script>
+<style>
+.pass { border: 3px solid green; padding: 5px;}
+.res { border: 3px solid red; padding: 5px;}
+</style>
+</head>
+
+<body>
+<h1>JabJS - Super-Simple Data-Binding - A Walk-Through</h1>
+<script>
+// bind property to element - DONE
+// bind property to element, two way - DONE
+// bind property to element, three way, using an array of elements - DONE
+// bind property to element, select & checkbox - DONE
+// bind property to selector - DONE
+
+// bind with special binding (show, bgcolor, clickhandler) - DONE
+// bind with custom binding - 
+
+// bind sub-element 
+// afterhooks, interactive menus
+// binding to javascript variables
+
+// bind object to DOM node, recursively (with 'name' to signify obj's keys)
+// bind object to DOM node, recursively (with custom domAttr to signify obj's keys)
+
+// bind array of objects to element (repeater *within container - you must have container*)
+// bind array to repeater (with custom dom attr to signify obj's keys)
+// bind array as nested field, update in place
+// bind array as nested field, replace completely 
+// bind array - set new item using "set" 
+
+// bind object, including array as nested field
+
+//todos mvc
+function get(selector) { return document.querySelector(selector) || document.getElementById(selector)  }
+
+function passElem(elem) { elem.classList.remove('res'); elem.classList.add('pass'); }
+function assertElem(selector, expectedValue) { 
+    var elem = get(selector);
+    var pass = ( (elem.value == expectedValue) || (elem.textContent == expectedValue) );
+    if (pass) passElem(elem);        
+}
+
+function assertModel(variable, expectedValue, selectorForStatus) { 
+    var elem = get(selectorForStatus);
+    var msg =  "model is: "+variable+" and should have been "+expectedValue;
+    elem.textContent = elem.value = msg;    
+    if (variable == expectedValue) passElem(get(selectorForStatus)); 
+}
+
+function simulateChanged(elem) { 
+    elem.dispatchEvent(new Event('keyup'));
+    elem.dispatchEvent(new Event('change'));
+}
+
+function setVal(selector, val) {
+    var elem = get(selector);    
+    elem.value = val;
+    simulateChanged(elem);
+}
+</script>
+
+<ol>
+    <li>
+        <h4> Bind Property To Element </h4>            
+        <span class="res" id="adam"></span> <span> should show "adam2"</span>
+        
+         <script class="script">
+            adam = {name: 'adam'}; 
+            jab.bind(adam, 'name', '#adam');
+            adam.name = "adam2";
+            
+            assertElem('adam', 'adam2');
+        </script>                    
+    </li>
+
+    <li>
+        <h4> Bind Property To Element, Two Way </h4>            
+        <input class="res" id="bob"> <span class="res" id="bobModel"></span> <span> Both should show "bob2"</span>
+         <script class="script">
+            bob = {name: 'bob'}; 
+            jab.bind(bob, 'name', '#bob');            
+            setVal("#bob", 'bob2');
+            
+            assertElem('#bob', 'bob2');
+            assertModel(bob.name, 'bob2', '#bobModel');
+        </script>                    
+    </li>
+    
+    <li>
+        <h4> Bind Property To Element, Three Way </h4>            
+        <input class="res" id="carol2">
+        <textarea class="res" id="carol3"></textarea>
+         <span class="res" id="carolModel"></span> 
+         <span> All three should show carol3 </span>
+         <script class="script">
+            carol = {name: 'carol'};
+            carolElems = [get('carol2'), get('carol3')]; 
+            jab.bind(carol, 'name', carolElems);            
+            
+            setVal('#carol2', 'carol2');
+            setVal('#carol3', 'carol3');
+            
+            assertElem('#carol2', 'carol3');
+            assertElem('#carol3', 'carol3');
+            assertModel(carol.name, 'carol3', '#carolModel');
+        </script>                    
+    </li>    
+
+    <li>
+        <h4> Bind Property To Select, Checkbox </h4>            
+        <select id="danny">
+            <option value="danny-opt-1">#select (Danny opt 1)</option>  
+            <option value="danny-opt-2">#select (Danny opt 2)</option>
+        </select>
+        <input type="checkbox" id="danny-checkbox" value="value">
+                  
+         <script class="script">
+            danny = {opt: 1};            
+            jab.bind(danny, 'opt', [get("#danny"), get("#danny-checkbox")]);                        
+        </script>                    
+    </li>    
+
+    <li>
+        <h4> Bind Property To Selector </h4>            
+        <div class="evan"></div>
+        
+         <script class="script">
+            evan = {name: 'evan'};            
+            jab.bind(evan, 'name', ".evan");                        
+        </script>                    
+    </li>    
+
+    <li>
+        <h4> Special Bindings (Not 'sync values') </h4>            
+        <div id="fatima">Am I visible?</div>
+        
+         <script class="script">
+            fatima = {shouldShow: 'true', backgroundColor: 'lightgreen', clickHandler: function(){ alert(101); } };            
+            jab.bind(fatima, 'shouldShow', "#fatima", 'show');                        
+            jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                        
+            jab.bind(fatima, 'clickHandler', "#fatima", {func: 'click'});                        
+        </script>                    
+    </li>
+
+    <li>
+        <h4> Special Bindings (Not 'sync values') </h4>            
+        <div id="fatima">Am I visible?</div>
+        
+         <script class="script">
+            fatima = {shouldShow: 'true', backgroundColor: 'lightgreen', clickHandler: function(){ alert(101); } };            
+            jab.bind(fatima, 'shouldShow', "#fatima", 'show');                        
+            jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                        
+            jab.bind(fatima, 'clickHandler', "#fatima", {func: 'click'});                        
+        </script>                    
+    </li>
+
+</ol>
+</body>
+<!-- <script text="text/javascript" src="jabArr.js"></script> -->
+<script>
+    //     user = {name: 'Joe'};
+    //     jab.bind(user, 'name', document.getElementById('input'));
+    // //    arr = [10,20,30]
+    //     //elem = ul;
+    //  arr = [{a:1}, {a:2}];
+    // li = document.querySelector('.li');
+    // bindArr(arr, li);
+
+    // cob = {nestedArr: [{b:2},{b:4}] };
+    // jab.bind(cob,'nestedArr','#nestedUL');
+
+    // zob = {nestedZob: [{c:5}, {c:7}], area: "beverly hills"};
+    // jab.bindObj(zob,'#zob');
+</script>
+</html>

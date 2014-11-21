@@ -23,8 +23,7 @@
 //ul.innerHTML = ''; 
 
 function clearElem(node) { //clears elem's contents. (like .innerHTML = '');
-    node.innerHTML = '';
-    //while (node.firstChild) { node.removeChild(node.firstChild); }
+    node.innerHTML = ''; //alternative: while (node.firstChild) { node.removeChild(node.firstChild); }
 }
 
 var arrayChangingFuncs = [ "pop", "push", "reverse", "shift", "unshift", "splice", "sort", "filter"];

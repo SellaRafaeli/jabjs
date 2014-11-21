@@ -23,7 +23,7 @@
 
 // bind object, including array as nested field
 
-
+//todos mvc
 
 
 
@@ -117,6 +117,7 @@ function getDomValueProp(elem) {
             case 'show': return show;
             case 'bgcolor': return bgcolor;                                
             case 'disable': return disable;                                
+            case 'click': return click;                                
         }
     }
 
@@ -222,8 +223,65 @@ function bindObj(obj, elemOrSelector, domAttrForObjKey) {
     return obj;
 }
 
+function clearElem(node) { //clears elem's contents. (like .innerHTML = '');
+    node.innerHTML = ''; //alternative: while (node.firstChild) { node.removeChild(node.firstChild); }
+}
 
-window.jab = {bind: bindModelToElem, bindVar: bindVar, bindObj: bindObj};
+var arrayChangingFuncs = ["pop", "push", "reverse", "shift", "unshift", "splice", "sort", "filter"];
+
+function setArrOnChangesCB(arr, cb) { 
+    arrayChangingFuncs.forEach(function(funcName){ 
+        var func = arr[funcName];
+        arr[funcName] = function() {
+            var res = func.apply(this, arguments);
+            //console.log("invoked "+funcName+"; invoking CB");
+            cb(arr);            
+            return res;
+        }
+    });
+
+    cb(arr); //trigger to start it off
+}
+
+function bindArr(arr, elem, domAttr) {        
+    var orig = elem;
+    var papa = elem.parentElement || elem.originalParent;
+    //whenever array changes, we want to...
+    var repeatElementByArr = function(newArr) {
+        //debugger
+        var origElem = elem;
+        clearElem(papa);        
+        orig.parentElement = papa; //keep this for later
+        newArr.forEach( function(item, index) {         
+            if (isObj(item)) { //if it's a primitive, it's unclear what/how to bind, since it does not have a father obj. 
+                var newNode = papa.appendChild(orig.cloneNode(true));        
+                jab.bindObj(item, newNode, domAttr);
+            }
+        });
+        orig.parentElement = papa; //keep this for later    
+    };    
+
+    //when arr changes, repeatElementByArr
+    setArrOnChangesCB(arr, repeatElementByArr);
+
+    //enable refreshing
+    arr.updateBindings = function() { 
+        repeatElementByArr(arr);
+    }
+
+    //enable accessing by index, 
+    arr.set = function(index, obj) {
+        arr[index] = obj;
+        arr.updateBindings();
+    }
+}
+
+window.jab = {
+    bind: bindModelToElem, 
+    bindVar: bindVar, 
+    bindObj: bindObj,
+    bindArr: bindArr
+};
 console.log("loaded JabJS");
 //}());
 

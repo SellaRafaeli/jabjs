@@ -41,7 +41,7 @@
 <div id="zob">
     <div id="zobArrContainer">
         <span id="tob" name="nestedZob">
-            <span name="c">Original</span>        
+            <span name="c">(original)</span>        
         </span>
     </div>
     
@@ -71,13 +71,20 @@
 
 </body>
 <script text="text/javascript" src="../jab.js"></script>
-<script text="text/javascript" src="jabArr.js"></script>
+<!-- <script text="text/javascript" src="jabArr.js"></script> -->
 <script>
     user = {name: 'Joe'};
     jab.bind(user, 'name', document.getElementById('input'));
 //    arr = [10,20,30]
     //elem = ul;
- 
+ arr = [{a:1}, {a:2}];
+li = document.querySelector('.li');
+bindArr(arr, li);
+
+cob = {nestedArr: [{b:2},{b:4}] };
+jab.bind(cob,'nestedArr','#nestedUL');
+
+zob = {nestedZob: [{c:5}, {c:7}], area: "beverly hills"};
+jab.bindObj(zob,'#zob');
 </script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </html>
