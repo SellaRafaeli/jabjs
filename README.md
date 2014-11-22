@@ -145,7 +145,7 @@ jab.bind(car, 'distance', document.getElementById('p')); //#p.innerHTML == 30
 car.speed = 20 //#input.value == 20, textarea.value == 3, #p.value == 60
 ```
 
-#### Binding to JavaScript variables - Pure Reactive JavaScript
+#### Binding between JavaScript variables - Pure Reactive JavaScript
 
 JabJS also enables you to performing binding on pure JavaScript objects, with no DOM elements. This can be used to hold computed variables of a user (composed of other variables). Along with DOM bindings, this can be utilized to bind computed, reactive properties to the DOM itself. 
 
@@ -157,10 +157,56 @@ jab.bindVar(man, ['firstName', 'lastName'], function() { man.fullName = man.firs
 jab.bind(man, 'fullName', div); //...and so will its binded view. 
 ```
 
+#### Bind entire object to DOM element
+
+A common use-case is binding an entire variable to a DOM element, like so:
+
+```html
+            <div id="data">
+                <div name="number"></div>
+                <span name="word"></span>
+                <div>
+                    <p name="color"></p>
+                    <p name="shape"></p>
+                </div>
+                <input name="country">
+            </div>
+```
+
+```js            
+            data = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
+            jab.bindObj(data, "#data");                 
+```
+     
+As you can see, the object is binded recursively - any subelement with with a `name` of `foo` is binded to the property `foo` in the binded object. 
+
+#### Bind object to DOM, using custom attributes
+
+Instead of using `name` as the attribute marking the key to bind to, you can supply a custom attribute name as a 3rd parameter to 'bindObj'. 
+
+```html
+            <div id="data">
+                <div k="number"></div>
+                <span k="word"></span>
+                <div>
+                    <p k="color"></p>
+                    <p k="shape"></p>
+                </div>
+                <input k="country">
+            </div>
+```
+
+```js            
+            data = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
+            jab.bindObj(data, "#data", "k");                 
+```
+
+A standard convention is to use attributes that start with "data-" (such as "data-key"), for future-proofing, although in practice you can use any key. The JabJS team likes using the literal 'k' for 'key' for expressiveness. 
+
 #### Technical Points
 * Stand-alone & dependency-free, simply include and run.
-* Tiny: ~1.5K compressed. 
-* Pure JS, creates bindings without changing HTML markup: Keep your JS out of your markup.
+* Small: ~1.5K compressed. 
+* Pure JS, creates bindings without changing HTML markup: Keep your logic out of your markup!
 * Source code is easily readable and modifiable - understand exactly what is happening, customize to your own needs. 
 * Orthogonal to other JS libraries - use it anywhere, with any other library or templating, without depending or modifying anything else. 
 
