@@ -20,7 +20,7 @@ Jab supports binding single properties, arrays, or complex objects. For example:
 
 ```html
 <div id="friendsElem">    
-    <section>
+      <section>
           <div name="cast"> 
               <p name="character"></p>
            </div>
@@ -319,7 +319,7 @@ Combining the above, you can bind an object which includes arrays (which include
 
 ```html
 <div id="friendsElem">    
-    <section>
+      <section>
           <div name="cast"> 
               <p name="character"></p>
            </div>
