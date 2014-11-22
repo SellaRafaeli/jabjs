@@ -11,32 +11,7 @@
 </head>
 
 <body>
-<h1>JabJS - Super-Simple Data-Binding - A Walk-Through</h1>
 <script>
-// bind property to element - DONE
-// bind property to element, two way - DONE
-// bind property to element, three way, using an array of elements - DONE
-// bind property to element, select & checkbox - DONE
-// bind property to selector - DONE
-
-// bind with special binding (show, bgcolor, clickhandler) - DONE
-// bind with custom bindings - DONE
-
-// bind sub-element  - DONE
-// afterhooks, interactive menus - DONE
-// binding to javascript variables - DONE
-
-// bind object to DOM node, recursively (with 'name' to signify obj's keys) - DONE
-// bind object to DOM node, recursively (with custom domAttr to signify obj's keys) - DONE
-
-// bind array of objects to element (repeater *within container - you must have container*) - DONE
-// bind array to repeater (with custom dom attr to signify obj's keys) - DONE
-// bind array as nested field, replace completely - DONE
-// bind array - set new item using "set" - DONE
-
-// bind object, including array as nested field - DONE
-
-//todos mvc
 function get(selector) { return document.querySelector(selector) || document.getElementById(selector)  }
 
 function passElem(elem) { elem.classList.remove('res'); elem.classList.add('pass'); }
@@ -65,6 +40,8 @@ function setVal(selector, val) {
 }
 </script>
 
+<h1>JabJS - Super-Simple Data-Binding - Specs & Examples</h1>
+<p> The following contains a list of working code examples of each functionality of JabJS. You are encouraged to look at the source code of each example in order to better understand how to work with JabJS. </p>
 <ol>
     <li>
         <h4> Bind Property To Element </h4>            
@@ -74,23 +51,17 @@ function setVal(selector, val) {
             adam = {name: 'adam'}; 
             jab.bind(adam, 'name', '#adam');
             adam.name = "adam2";
-            
-            //assertElem('adam', 'adam2');
         </script>                    
     </li>
 
     <li>
         <h4> Bind Property To Element, Two Way </h4>            
         <input class="res" id="bob">
-        <!--  <span class="res" id="bobModel"></span>  -->
         <span> view & model should show "bob2" (synced)</span>
          <script class="script">
             bob = {name: 'bob'}; 
             jab.bind(bob, 'name', '#bob');            
             setVal("#bob", 'bob2');
-            
-            //assertElem('#bob', 'bob2');
-            //assertModel(bob.name, 'bob2', '#bobModel');
         </script>                    
     </li>
     
@@ -98,7 +69,7 @@ function setVal(selector, val) {
         <h4> Bind Property To Element, Three Way </h4>            
         <input class="res" id="carol2">
         <textarea class="res" id="carol3"></textarea>
-         <!-- <span class="res" id="carolModel"></span>  -->
+
          <span> View &  two models should show carol3 (synced) </span>
          <script class="script">
             carol = {name: 'carol'};
@@ -107,10 +78,7 @@ function setVal(selector, val) {
             
             setVal('#carol2', 'carol2');
             setVal('#carol3', 'carol3');
-            
-            //assertElem('#carol2', 'carol3');
-            //assertElem('#carol3', 'carol3');
-            //assertModel(carol.name, 'carol3', '#carolModel');
+
         </script>                    
     </li>    
 
@@ -381,20 +349,4 @@ function setVal(selector, val) {
 
 </ol>
 </body>
-<!-- <script text="text/javascript" src="jabArr.js"></script> -->
-<script>
-    //     user = {name: 'Joe'};
-    //     jab.bind(user, 'name', document.getElementById('input'));
-    // //    arr = [10,20,30]
-    //     //elem = ul;
-    //  arr = [{a:1}, {a:2}];
-    // li = document.querySelector('.li');
-    // bindArr(arr, li);
-
-    // cob = {nestedArr: [{b:2},{b:4}] };
-    // jab.bind(cob,'nestedArr','#nestedUL');
-
-    // zob = {nestedZob: [{c:5}, {c:7}], area: "beverly hills"};
-    // jab.bindObj(zob,'#zob');
-</script>
 </html>
