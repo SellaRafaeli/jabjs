@@ -30,12 +30,11 @@
 // bind object to DOM node, recursively (with custom domAttr to signify obj's keys) - DONE
 
 // bind array of objects to element (repeater *within container - you must have container*) - DONE
-// bind array to repeater (with custom dom attr to signify obj's keys)
-// bind array as nested field, update in place
-// bind array as nested field, replace completely 
-// bind array - set new item using "set" 
+// bind array to repeater (with custom dom attr to signify obj's keys) - DONE
+// bind array as nested field, replace completely - DONE
+// bind array - set new item using "set" - DONE
 
-// bind object, including array as nested field
+// bind object, including array as nested field - DONE
 
 //todos mvc
 function get(selector) { return document.querySelector(selector) || document.getElementById(selector)  }
@@ -258,15 +257,121 @@ function setVal(selector, val) {
         
         <li>
             <h4> Bind array of objects to repeat element (within container)   </h4>            
-            <ul id="nancy">
-                <li name="a"></li>                
             <ul>
+                <li id="nancy" name="a"></li>                
+            </ul>
                         
              <script class="script">
+                nancy = [ {a: "nancy-1"}, {a: "nancy-2"}, {a: "nancy-3"} ];
+                jab.bindArr(nancy, "#nancy");
+
+                nancy[0].a = "nancy-1-amended";
+                nancy.push({a: 'nancy-4'});                
+                nancy.push({a: 'nancy-6'});
+                nancy.push({a: 'nancy-5'});
+                nancy.push({a: 10});
+                nancy.push({a: 30});
+                nancy.push({a: 20});
+                nancy.reverse();
+                nancy.sort(function(a, b) { 
+                    return (a.a).localeCompare(b.a);
+                 }); //sort by object's attribute, and compare by string (in this case)
                 
             </script>                    
         </li>     
-            
+        
+        <li>
+            <h4> Bind array to repeater (with custom dom attr to signify obj's keys)   </h4>            
+            <ul>
+                <li id="opera" my-custom-attr="hair"></li>                
+            </ul>
+                        
+             <script class="script">
+                opera = [ {hair: "black"}, {hair: "blonde"}, {hair: "brunette"} ];
+                // opera = [ {hair: "black"} ];
+                jab.bindArr(opera, "#opera", "my-custom-attr");
+
+                opera[0].hair = "opera-1-amended";
+                opera.set(2, {hair: 'brunette-replaced'});
+
+                opera.push({hair: 'opera-2'});                
+                opera.push({hair: 'opera-4'});
+                opera.push({hair: 'opera-3'});
+                opera.push({hair: 10});
+                opera.push({hair: 30});
+                opera.push({hair: 20});
+
+                opera.reverse();
+                opera.sort(function(a, b) { 
+                    return (a.hair).localeCompare(b.hair);
+                 }); //sort by object's attribute, and compare by string (in this case)
+
+
+            </script>                    
+        </li>         
+        
+        <li>
+            <h4> Bind array as nested field, including reassigning entire array   </h4>            
+            <ul>
+                <li id="pink" name="c"></li>                
+            </ul>
+                        
+             <script class="script">
+                pink = {};
+                pink.nestedArr = [ {c: 10}, {c: 20}, {c: 30} ];
+                
+                jab.bind(pink, "nestedArr", "#pink");
+                pink.nestedArr = [ {c: "new-array, value 1"}, {c: "new-array, value 2"} ];
+                pink.nestedArr[1].c = "new-array, value 2: amended";
+            </script>                    
+        </li>         
+
+        <li>
+            <h4> Bind array, assign sub-index using 'set' or with [ ] & 'updateBindings'   </h4>            
+            <ul>
+                <li id="quinn" name="age"></li>                
+            </ul>
+                        
+             <script class="script">
+                quinn = [ {age: "20"}, {age: "30"}, {age: "40"} ];
+                
+                jab.bindArr(quinn, "#quinn");
+                quinn.set(0, {age: "20 - updated using 'set' " });
+                quinn[1] = {age: "30 - reassigned using [ ]"};                            
+                quinn.updateBindings(); //after using '[ ]' for complete assignment in internal existing binded array, you must run updateBindings() to refresh view. (For modification of members, not necessary.)
+            </script>                    
+        </li>
+
+        <li>
+            <h4> Bind object, including array as nested field</h4>            
+            <div id="friendsElem">
+                
+                <div id="castContainer">
+                    <div name="castMembers"> 
+                        <p name="character"></p>
+                     </div>
+                </div>
+                
+                <div name="city">Area</div>
+                
+                <input name="rating">
+                <div name="rating"></div> 
+                <input name="rating">
+                <div name="rating"></div> 
+            </div>
+                        
+             <script class="script">
+                friends = { 
+                    castMembers: [ {character: 'Rachel'}, {character: 'Monica'} ], 
+                    city: "New York",
+                    rating: 9.9
+                };
+
+                jab.bindObj(friends, '#friendsElem');
+            </script>                    
+        </li>
+        
+
 </ol>
 </body>
 <!-- <script text="text/javascript" src="jabArr.js"></script> -->

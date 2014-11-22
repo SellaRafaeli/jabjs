@@ -215,16 +215,33 @@ function bindObj(obj, elemOrSelector, domAttrForObjKey) {
         elems = [elem];
      }//if no children, bind to himself.        
 
-    elems.forEach(function (elem) {
-        objProperty = elem.getAttribute(domAttr);
-        if (obj[objProperty]) bindModelToElem(obj, objProperty, elem);        
-    });
+     //map which elems are binded to which object keys
+    var objKeysMap = elems.reduce(function(totalVal, curElem) {                                 
+                                    var key = curElem.getAttribute(domAttr); //object key to bind to object
+                                    if(key) { totalVal[key] = totalVal[key] || []; totalVal[key].push(curElem); } 
+                                    return totalVal;
+                                }, {});
+
+    for (key in objKeysMap) { 
+        var elems = objKeysMap[key]; 
+        if (obj[key]) bindModelToElem(obj, key, elems);                
+    }
+    //also works instead of using objKeysMap, but incorrectly overrides when binding to more than one elem (since we currently override new jab.binds)
+    // elems.forEach(function (elem) {
+    //     objProperty = elem.getAttribute(domAttr);
+    //     if (obj[objProperty]) bindModelToElem(obj, objProperty, elem);        
+    // });
 
     return obj;
 }
 
 function clearElem(node) { //clears elem's contents. (like .innerHTML = '');
-    node.innerHTML = ''; //alternative: while (node.firstChild) { node.removeChild(node.firstChild); }
+    try { 
+        node.innerHTML = ''; //alternative: while (node.firstChild) { node.removeChild(node.firstChild); }
+    } catch (e) {
+        var temp = node;
+        throw e;
+    }
 }
 
 var arrayChangingFuncs = ["pop", "push", "reverse", "shift", "unshift", "splice", "sort", "filter"];
@@ -243,22 +260,23 @@ function setArrOnChangesCB(arr, cb) {
     cb(arr); //trigger to start it off
 }
 
-function bindArr(arr, elem, domAttr) {        
-    var orig = elem;
+function bindArr(arr, elem, domAttr) {            
+    //var orig = elem;
+    var elem = toArray(toDomElems(elem))[0]; 
     var papa = elem.parentElement || elem.originalParent;
     //whenever array changes, we want to...
     var repeatElementByArr = function(newArr) {
         //debugger
-        var origElem = elem;
+        //var origElem = elem;
         clearElem(papa);        
-        orig.parentElement = papa; //keep this for later
+        //elem.parentElement = papa; //keep this for later
         newArr.forEach( function(item, index) {         
             if (isObj(item)) { //if it's a primitive, it's unclear what/how to bind, since it does not have a father obj. 
-                var newNode = papa.appendChild(orig.cloneNode(true));        
+                var newNode = papa.appendChild(elem.cloneNode(true));        
                 jab.bindObj(item, newNode, domAttr);
             }
         });
-        orig.parentElement = papa; //keep this for later    
+        elem.parentElement = papa; //keep this for later    
     };    
 
     //when arr changes, repeatElementByArr
