@@ -12,6 +12,10 @@
         return a.constructor === Array;
     }
 
+    function getAttributesNames(domElem) { 
+        return Array.prototype.slice.call(domElem.attributes).map(function(item) { return item.name });
+    } 
+
     function toArray(itemOrArray) { //
         itemOrArray = itemOrArray || [];
         if (isArray(itemOrArray)) return itemOrArray;
@@ -34,7 +38,9 @@
     }
 
     function descendants(elem) { 
-        return toArr(elem.querySelectorAll("*")); 
+        var res = toArr(elem.querySelectorAll("*"))
+        res.push(elem); 
+        return res;
     }
 
 /* DOM manipulation */
@@ -86,8 +92,8 @@ function getDomValueProp(elem) {
         switch(opts.func) {
             case 'show': return show;
             case 'bgcolor': return bgcolor;                                
-            case 'disable': return disable;                                
-            case 'click': return click;                                
+            case 'disable': return disable;                                                               
+            case 'enter': return enter;
         }
     }
 
@@ -103,13 +109,23 @@ function bgcolor(elem, value) {
     elem.style.backgroundColor = value;
 }
 
-function click(elem, value) {
-    elem.addEventListener('click', value);
-}
-
 function disable(elem, value) {
     value ? elem.disabled = true : elem.disabled = false;
 }
+
+function enter(elem, cb) { //should be refactored into a markupBinding        
+    if (elem.listenEnter) return;
+    elem.listenEnter = true;
+
+    elem.addEventListener("keyup", function (e) {
+        if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"                        
+            var value = elem.value;
+            cb(value);            
+            elem.value = ""; //clean             
+        }
+    });    
+}
+    
 
 /* JabJS logic */
 function markBindings(obj, property, domElems, opts) {
@@ -174,6 +190,28 @@ function bindVar(obj, propsList, cb) {
     propsList.forEach(function(property) { bindVarCore(obj, property, cb) });
 }
 
+function bindMarkupCallbacks(obj, elems) {
+    elems.forEach(function (elem) {
+        var attributes = getAttributesNames(elem);
+        attributes.forEach(function(attr) {
+            if (attr.indexOf('jab-') == 0) { //starts with jab-
+                var cbType = attr.substring('jab-'.length); //part after jab-. E.g. "click"
+                var eventName = 'on'+cbType;
+                var cbName  = elem.getAttribute(attr);                
+                elem[eventName] = function() { 
+                    if (obj[cbName]) obj[cbName](elem); 
+                    
+                    else { //immediate, literal callbacks
+                        var parts = cbName.split('-');
+                        if (parts[0] == 'addClass')       elem.classList.add(parts[1]);                        
+                        if (parts[1] == 'removeClass')  elem.classList.removeClass(parts[1]);                         
+                    }
+                }
+            }
+        }); 
+    });
+}
+
 //bind all properties of all descendants of one element, by 'name' (or other) attribute)
 function bindObj(obj, elemOrSelector, domAttrForObjKey) {
     var elem = toArray(toDomElems(elemOrSelector))[0];
@@ -192,15 +230,12 @@ function bindObj(obj, elemOrSelector, domAttrForObjKey) {
                                 }, {});
 
     for (key in objKeysMap) { 
-        var elems = objKeysMap[key]; 
-        if (obj[key]) bindModelToElem(obj, key, elems);                
+        var bindedElems = objKeysMap[key]; 
+        if (obj.hasOwnProperty(key)) bindModelToElem(obj, key, bindedElems);                
     }
-    //also works instead of using objKeysMap, but incorrectly overrides when binding to more than one elem (since we currently override new jab.binds)
-    // elems.forEach(function (elem) {
-    //     objProperty = elem.getAttribute(domAttr);
-    //     if (obj[objProperty]) bindModelToElem(obj, objProperty, elem);        
-    // });
-
+    
+    bindMarkupCallbacks(obj, elems);
+    
     return obj;
 }
 
@@ -220,7 +255,6 @@ function setArrOnChangesCB(arr, cb) {
         var func = arr[funcName];
         arr[funcName] = function() {
             var res = func.apply(this, arguments);
-            //console.log("invoked "+funcName+"; invoking CB");
             cb(arr);            
             return res;
         }
@@ -234,13 +268,10 @@ function bindArr(arr, elem, domAttr) {
     var elem = toArray(toDomElems(elem))[0]; 
     var papa = elem.parentElement || elem.originalParent;
     //whenever array changes, we want to...
-    var repeatElementByArr = function(newArr) {
-        //debugger
-        //var origElem = elem;
+    var repeatElementByArr = function(newArr) {        
         clearElem(papa);        
-        //elem.parentElement = papa; //keep this for later
         newArr.forEach( function(item, index) {         
-            if (isObj(item)) { //if it's a primitive, it's unclear what/how to bind, since it does not have a father obj. 
+            if (isObj(item)) { //we can't bind primitives. 
                 var newNode = papa.appendChild(elem.cloneNode(true));        
                 jab.bindObj(item, newNode, domAttr);
             }
@@ -269,5 +300,5 @@ window.jab = {
     bindObj: bindObj,
     bindArr: bindArr
 };
-//console.log("loaded JabJS");
+console && console.log("loaded JabJS");
 }());

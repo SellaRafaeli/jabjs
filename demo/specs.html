@@ -115,12 +115,10 @@ function setVal(selector, val) {
          <script class="script">
             fatima = {shouldShow: 'false', backgroundColor: 'lightgreen', clickHandler: function(){ console.log("no-op") } };            
             jab.bind(fatima, 'shouldShow', "#fatima", 'show');                        
-            jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                        
-            jab.bind(fatima, 'clickHandler', "#fatima", {func: 'click'});                        
+            jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                                    
 
             fatima.backgroundColor = 'lightblue';
             fatima.shouldShow = true;
-            fatima.clickHandler = function(){ alert("hello fatima"); };            
         </script>                    
     </li>
 
@@ -317,12 +315,12 @@ function setVal(selector, val) {
         </li>
 
         <li>
-            <h4> Bind object, including array as nested field</h4>            
+            <h4> Bind object, including array as nested field, and MarkupCallbacks</h4>            
             <div id="friendsElem">
-                
+                <h4> Friends - Males </h4>   
                 <section>
                     <div name="cast"> 
-                        <p name="character"></p>
+                        <p name="character" jab-click='sayName'></p>
                      </div>
                 </section>
                 
@@ -336,14 +334,17 @@ function setVal(selector, val) {
                 friends = { 
                     cast: [ {character: 'Rachel'}, {character: 'Monica'} ], 
                     city: "NY",
-                    rating: 9
+                    rating: 9,
                 };
 
                 jab.bindObj(friends, '#friendsElem');
 
-                friends.cast = [{character: "Chandler"}, { character: "Joey"}];
+                friends.cast = [{character: "Chandler", sayName: function() {alert("clicked "+this.character); }}, 
+                                      { character: "Joey"}, 
+                                      {character: "Ross"}];
                 friends.city = "New York";
                 friends.rating = 9.9;
+                friends.sayName = function() {alert('aloha');}
             </script>                    
         </li>
         
