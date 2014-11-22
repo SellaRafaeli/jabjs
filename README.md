@@ -16,11 +16,50 @@ user = {name: 'John Lennon'}; //any JavaScript object
 jab.bind(user, 'name', document.getElementByid('input')); //user is now binded (two-way) with #input
 ```
 
-That's it. Include the jab.js script and start binding. 
+Jab supports binding single properties, arrays, or arbitrarily nested objects. For example:
 
-#### Demo Page
+```html
+<div id="friendsElem">    
+    <section>
+          <div name="cast"> 
+              <p name="character"></p>
+           </div>
+      </section>      
+
+      <p name="city"></p>
+      <div name="rating"></div> 
+      <input name="rating">
+</div>
+```
+
+```js
+friends = { 
+    cast: [ {character: 'Rachel'}, {character: 'Monica'} ], 
+    city: "NY",
+    rating: 8
+};
+
+jab.bindObj(friends, '#friendsElem');
+
+friends.cast = [{character: "Chandler"}, { character: "Joey"}]; //replace or modify members arbitrarily
+friends.city = "New York";
+friends.rating = 9.9;
+```
+
+#### Installation and usage
+
+1. Download and include on your page: 
+
+```html
+<script src="jab.js"></script>
+```
+
+That's it, you can now bind your objects to your DOM.using `jab.bind`, `jab.bindVar`, `jab.bindArr`, `jab.bindObj`. 
+
+#### Demos and specs Page
 This tutorial is accompanied by [the JabJS demo page](http://www.sellarafaeli.com/jabjs-demo/index.html), which includes some HTML and the JabJS library. Every example given in this document can (and should) be executed on that page via the JavaScript console, to demonstrate JabJS usage.  
 
+You are also encourage to download this repo and open demo/specs.html, which includes a working example of every piece of functionality.
 #### Bind To Element
 Suppose you have an HTML element `<div id="div"></div>` and a POJS (plain old JavaScript object) 
 
