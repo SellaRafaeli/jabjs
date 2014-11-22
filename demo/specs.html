@@ -346,28 +346,30 @@ function setVal(selector, val) {
             <h4> Bind object, including array as nested field</h4>            
             <div id="friendsElem">
                 
-                <div id="castContainer">
-                    <div name="castMembers"> 
+                <section>
+                    <div name="cast"> 
                         <p name="character"></p>
                      </div>
-                </div>
+                </section>
                 
-                <div name="city">Area</div>
+                <p name="city"></p>
                 
-                <input name="rating">
                 <div name="rating"></div> 
                 <input name="rating">
-                <div name="rating"></div> 
             </div>
                         
              <script class="script">
                 friends = { 
-                    castMembers: [ {character: 'Rachel'}, {character: 'Monica'} ], 
-                    city: "New York",
-                    rating: 9.9
+                    cast: [ {character: 'Rachel'}, {character: 'Monica'} ], 
+                    city: "NY",
+                    rating: 9
                 };
 
                 jab.bindObj(friends, '#friendsElem');
+
+                friends.cast = [{character: "Chandler"}, { character: "Joey"}];
+                friends.city = "New York";
+                friends.rating = 9.9;
             </script>                    
         </li>
         
