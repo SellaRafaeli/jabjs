@@ -16,7 +16,7 @@ user = {name: 'John Lennon'}; //any JavaScript object
 jab.bind(user, 'name', document.getElementByid('input')); //user is now binded (two-way) with #input
 ```
 
-Jab supports binding single properties, arrays, or arbitrarily nested objects. For example:
+Jab supports binding single properties, arrays, or complex objects. For example:
 
 ```html
 <div id="friendsElem">    
