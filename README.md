@@ -59,7 +59,7 @@ That's it, you can now bind your objects to your DOM.using `jab.bind`, `jab.bind
 #### Demos and specs Page
 This tutorial is accompanied by [the JabJS demo page](http://www.sellarafaeli.com/jabjs-demo/index.html), which includes some HTML and the JabJS library. Every example given in this document can (and should) be executed on that page via the JavaScript console, to demonstrate JabJS usage.  
 
-You are also encourage to download this repo and open demo/specs.html, which includes a working example of every piece of functionality.
+You are also encourage to download this repo and open [demo/specs.html](/demo/specs.html), which includes a working example of every piece of functionality.
 #### Bind To Element
 Suppose you have an HTML element `<div id="div"></div>` and a POJS (plain old JavaScript object) 
 
