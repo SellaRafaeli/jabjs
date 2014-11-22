@@ -6,7 +6,7 @@
 <style>
 .pass { border: 3px solid green; padding: 5px;}
 /*.res { border: 3px solid red; padding: 5px;}*/
-.res { border: 1px dotted blue; padding: 5px;}
+.box { border: 1px dotted blue; padding: 5px;}
 </style>
 </head>
 
@@ -22,14 +22,14 @@
 // bind with special binding (show, bgcolor, clickhandler) - DONE
 // bind with custom bindings - DONE
 
-// bind sub-element 
-// afterhooks, interactive menus
-// binding to javascript variables
+// bind sub-element  - DONE
+// afterhooks, interactive menus - DONE
+// binding to javascript variables - DONE
 
-// bind object to DOM node, recursively (with 'name' to signify obj's keys)
-// bind object to DOM node, recursively (with custom domAttr to signify obj's keys)
+// bind object to DOM node, recursively (with 'name' to signify obj's keys) - DONE
+// bind object to DOM node, recursively (with custom domAttr to signify obj's keys) - DONE
 
-// bind array of objects to element (repeater *within container - you must have container*)
+// bind array of objects to element (repeater *within container - you must have container*) - DONE
 // bind array to repeater (with custom dom attr to signify obj's keys)
 // bind array as nested field, update in place
 // bind array as nested field, replace completely 
@@ -69,7 +69,7 @@ function setVal(selector, val) {
 <ol>
     <li>
         <h4> Bind Property To Element </h4>            
-        <span class="res" id="adam"></span> <span>view should show "adam2"</span>
+        <span class="box" id="adam"></span> <span>(view should show "adam2")</span>
         
          <script class="script">
             adam = {name: 'adam'}; 
@@ -145,29 +145,128 @@ function setVal(selector, val) {
         <div id="fatima">Am I visible? Do I respond to clicks?</div>
         
          <script class="script">
-            fatima = {shouldShow: 'true', backgroundColor: 'lightgreen', clickHandler: function(){ alert(101); } };            
+            fatima = {shouldShow: 'false', backgroundColor: 'lightgreen', clickHandler: function(){ console.log("no-op") } };            
             jab.bind(fatima, 'shouldShow', "#fatima", 'show');                        
             jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                        
             jab.bind(fatima, 'clickHandler', "#fatima", {func: 'click'});                        
+
+            fatima.backgroundColor = 'lightblue';
+            fatima.shouldShow = true;
+            fatima.clickHandler = function(){ alert("hello fatima"); };            
         </script>                    
     </li>
 
-    <li>
-        <h4> Custom Bindings </h4>            
-        <div id="homer" style='border: 1px solid green;'>Homer</div>
-        
-         <script class="script">
-             setBorderWidth = function(elem, value) {                
-                elem.style.borderWidth = value+'px';
-            };
+        <li>
+            <h4> Custom Bindings </h4>            
+            <div id="homer" style='border: 1px solid green;'>Homer</div>
+            
+             <script class="script">
+                 setBorderWidth = function(elem, value) {                
+                    elem.style.borderWidth = value+'px';
+                };
 
-            borderData = {width: 20};
-            jab.bind(borderData, 'width', get('#homer'), {func: setBorderWidth});
-            borderData.width = 10;
-        </script>                    
-    </li>
+                borderData = {width: 20};
+                jab.bind(borderData, 'width', get('#homer'), {func: setBorderWidth});
+                borderData.width = 10;
+            </script>                    
+        </li>
     
+        <li>
+            <h4> Binding Sub-Element </h4>            
+            <div id="iris"></div>
+            
+             <script class="script">
+                band = {song: {title: 'something else'} };                
+                jab.bind(band.song, 'title', '#iris');
 
+                band.song.title = 'iris';
+            </script>                    
+        </li>
+
+          <li>
+            <h4> Afterhooks, interactive menus </h4>            
+            <input id="jamie1">
+            <textarea id="jamie2"></textarea>
+            <span id="jamie3"></span>
+
+             <script class="script">
+                car = {speed: "10", time: "3"};
+                computeDistance = function(){ car.distance = car.speed * car.time; };
+                jab.bind(car, 'speed', '#jamie1', {afterHook: computeDistance} ); //#jamie1.value == 10
+                jab.bind(car, 'time', '#jamie2', {afterHook: computeDistance}); //#jamie2.value == 3
+                jab.bind(car, 'distance', '#jamie3'); //#jamie3.innerHTML == 30
+                //now, changing the speed or time via the input elements or JS models will also update #p and distance.
+                car.speed = 20 //#jamie1.value == 20, jamie2.value == 3, #jamie3.value == 60
+            </script>                    
+        </li>
+
+        <li>
+            <h4> Binding to JavaScript variables - Pure Reactive JavaScript </h4>            
+            <div id="kevin-man">
+            
+             <script class="script">
+                man = {firstName: 'Bill', lastName: 'Clinton', fullName: ''};
+                jab.bindVar(man, ['firstName', 'lastName'], function() { man.fullName = man.firstName + " " +man.lastName } ); //whenever firstName or lastName change, fullName will also change...
+                jab.bind(man, 'fullName', '#kevin-man'); //...and so will its binded view. 
+                
+                man.firstName = "George"
+                man.lastName = "Bush"
+            </script>                    
+        </li>        
+            
+        <li>
+            <h4> Bind full object to DOM node recursively (with 'name' to signify obj's keys) </h4>            
+            <div id="lauren">
+                <div name="number"></div>
+                <span name="word"></span>
+                <div>
+                    <p name="color"></p>
+                    <p name="shape"></p>
+                </div>
+                <input name="country" id="country-lauren">
+            </div>
+            
+             <script class="script">
+                lauren = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
+                jab.bindObj(lauren, "#lauren");                 
+
+                lauren.number = 150;
+                setVal("#country-lauren", "Britain");
+            </script>                    
+        </li>     
+
+        <li>
+            <h4> Bind object to DOM node, recursively (with custom domAttr to signify obj's keys)    </h4>            
+            <div id="mike">
+                <div our-attr="number"></div>
+                <span our-attr="word"></span>
+                <div>
+                    <p our-attr="color"></p>
+                    <p our-attr="shape"></p>
+                </div>
+                <input our-attr="country" id="country-mike">
+            </div>
+            
+             <script class="script">
+                mike = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
+                jab.bindObj(mike, "#mike", "our-attr");                 
+                
+                mike.number = 12;
+                setVal("#country-mike", "Canada");
+            </script>                    
+        </li>     
+        
+        <li>
+            <h4> Bind array of objects to repeat element (within container)   </h4>            
+            <ul id="nancy">
+                <li name="a"></li>                
+            <ul>
+                        
+             <script class="script">
+                
+            </script>                    
+        </li>     
+            
 </ol>
 </body>
 <!-- <script text="text/javascript" src="jabArr.js"></script> -->
