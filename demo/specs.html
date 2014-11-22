@@ -281,13 +281,18 @@ function setVal(selector, val) {
         </li>     
         
         <li>
-            <h4> Bind array to repeater (with custom dom attr to signify obj's keys)   </h4>            
+            <h4> Bind array to repeater (with custom dom attr to signify obj's keys and nested templates) </h4>            
             <ul>
-                <li id="opera" my-custom-attr="hair"></li>                
+                <li id="opera" >
+                    <p my-custom-attr="hair"></p>
+                    <div class="foo">
+                        eyes: <span my-custom-attr="eyes"></span>
+                    </div>
+                </li>                
             </ul>
                         
              <script class="script">
-                opera = [ {hair: "black"}, {hair: "blonde"}, {hair: "brunette"} ];
+                opera = [ {hair: "black", eyes: "blue"}, {hair: "blonde"}, {hair: "brunette"} ];
                 // opera = [ {hair: "black"} ];
                 jab.bindArr(opera, "#opera", "my-custom-attr");
 

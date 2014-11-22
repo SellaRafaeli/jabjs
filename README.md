@@ -157,25 +157,25 @@ jab.bindVar(man, ['firstName', 'lastName'], function() { man.fullName = man.firs
 jab.bind(man, 'fullName', div); //...and so will its binded view. 
 ```
 
-#### Bind entire object to DOM element
+#### Bind entire object to DOM element: jab.bindObj
 
 A common use-case is binding an entire variable to a DOM element, like so:
 
 ```html
-            <div id="data">
-                <div name="number"></div>
-                <span name="word"></span>
-                <div>
-                    <p name="color"></p>
-                    <p name="shape"></p>
-                </div>
-                <input name="country">
-            </div>
+<div id="data">
+    <div name="number"></div>
+    <span name="word"></span>
+    <div>
+        <p name="color"></p>
+        <p name="shape"></p>
+    </div>
+    <input name="country">
+</div>
 ```
 
 ```js            
-            data = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
-            jab.bindObj(data, "#data");                 
+data = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
+jab.bindObj(data, "#data");                 
 ```
      
 As you can see, the object is binded recursively - any subelement with with a `name` of `foo` is binded to the property `foo` in the binded object. 
@@ -185,29 +185,132 @@ As you can see, the object is binded recursively - any subelement with with a `n
 Instead of using `name` as the attribute marking the key to bind to, you can supply a custom attribute name as a 3rd parameter to 'bindObj'. 
 
 ```html
-            <div id="data">
-                <div k="number"></div>
-                <span k="word"></span>
-                <div>
-                    <p k="color"></p>
-                    <p k="shape"></p>
-                </div>
-                <input k="country">
-            </div>
+<div id="data">
+    <div k="number"></div>
+    <span k="word"></span>
+    <div>
+        <p k="color"></p>
+        <p k="shape"></p>
+    </div>
+    <input k="country">
+</div>
 ```
 
 ```js            
-            data = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
-            jab.bindObj(data, "#data", "k");                 
+data = {number: 10, word: 'hello', color: 'blue', shape: 'circle', country: 'USA'};
+jab.bindObj(data, "#data", "k");                 
 ```
 
-A standard convention is to use attributes that start with "data-" (such as "data-key"), for future-proofing, although in practice you can use any key. The JabJS team likes using the literal 'k' for 'key' for expressiveness. 
+A standard convention is to use attributes that start with "data-" (such as "data-key"), for future-proofing, although in practice you can use any key. 
+
+#### Bind array of objects to repeat element (within container): jab.bindArr
+
+Using `jab.bindArr` You can use JabJS to bind array, 'repeating' an element for every member in your array. 
+            
+```html
+<ul>
+    <li class=".country" name="countryName"></li>                
+</ul>
+```
+
+```js
+countries = [ {countryName: "USA"}, {countryName: "Canada"}, {countryName: "France"} ];
+jab.bindArr(countries, ".country");
+```
+
+The binded element (in the above example, the `li` with `'.country'`) will be repeated for every member in the array. (Creating 3 `li`s in the above example). Each member will be binded by the property value of the attribute `name` - in the above example, `countryName`. Here, too, you can use a custom attribute name supplied as a 3rd parameter: 
+
+```html
+<ul>
+    <li class=".country" k="name"></li>                
+</ul>
+```
+
+```js
+countries = [ {countryName: "USA"}, {countryName: "Canada"}, {countryName: "France"} ];
+jab.bindArr(countries, ".country", "k");
+```
+
+Take note you select **the element you wish to repeat**, and that that element must have a container, as the repeated members will form the entire contents of the container. 
+
+Note each object is binded like an object, so you can create arbitrarily nested templates with your repeaters: 
+
+```html
+<ul>
+    <li class=".country">
+        <p k="name"></p>
+        <div>
+            <span k="population"></span>
+            <span k="continent"></span>
+        </div>
+    </li>                
+</ul>
+```
+
+```js
+countries = [ {name: "USA", population: "316 million", continent: "North America"},
+                   {countryName: "Canada", population: "31 million", continent: "North America"}, 
+                   {countryName: "France", poplation: "66 million", continent: "North America"} ];
+jab.bindArr(countries, ".country", "k");
+```
+
+Binded arrays support natve modification of existing members and all native array functions (pop, push, reverse, shift, unshift, splice, sort, filter). Basically just modify your array however you want and Jab will update the view. 
+
+An exception to this is access by random index (). On binded elements this should be done by calling `arr.set(index, newItem)` rather than using `arr[index] = newItem`. If you do use the second method, you need to run `arr.updateBindings()` on the array to refresh the view. 
+
+#### Bind array as a nested field of object, including replacing entire array
+
+```html
+<ul>
+    <li id="repeatMe" name="c"></li>                
+</ul>
+```                    
+
+```js
+obj = {};
+obj.arr = [ {c: 10}, {c: 20}, {c: 30} ];
+
+jab.bind(pink, "arr", "#repeatMe");
+obj.arr = [ {c: "new-array, value 1"}, {c: "new-array, value 2"} ]; //assign new arr, view syncs automatically
+```
+
+####Bind object, including array as nested field
+
+Combining the above, you can bind an object which includes arrays (which include objects) to an arbitrarily nested view, giving you powerful, arbitrary bindings between your native JS model and the DOM:
+
+```html
+<div id="friendsElem">    
+    <section>
+          <div name="cast"> 
+              <p name="character"></p>
+           </div>
+      </section>      
+
+      <p name="city"></p>
+      <div name="rating"></div> 
+      <input name="rating">
+</div>
+```
+
+```js
+friends = { 
+    cast: [ {character: 'Rachel'}, {character: 'Monica'} ], 
+    city: "NY",
+    rating: 8
+};
+
+jab.bindObj(friends, '#friendsElem');
+
+friends.cast = [{character: "Chandler"}, { character: "Joey"}]; //replace or modify members arbitrarily
+friends.city = "New York";
+friends.rating = 9.9;
+```
 
 #### Technical Points
 * Stand-alone & dependency-free, simply include and run.
-* Small: ~1.5K compressed. 
+* Small: ~1.5K compressed and gzipped. 
 * Pure JS, creates bindings without changing HTML markup: Keep your logic out of your markup!
-* Source code is easily readable and modifiable - understand exactly what is happening, customize to your own needs. 
+* Supports custom bindings - run any callback on binded element whenever a variable changes. 
 * Orthogonal to other JS libraries - use it anywhere, with any other library or templating, without depending or modifying anything else. 
 
 #### Etymology
@@ -216,4 +319,4 @@ A **jab** is a [type of punch](http://en.wikipedia.org/wiki/Jab) used in the mar
 #### Contact
 * Source code is on [GitHub](https://github.com/SellaRafaeli/jabjs/).
 * Demo page which works with all the examples in this tutorial is [here](http://www.sellarafaeli.com/jabjs-demo/index.html).
-* For any questions, help or pull requests please contact sella.rafaeli@gmail.com. 
+* For any questions, help or pull requests please contact sella.rafaeli@gmail.com directly. 

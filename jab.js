@@ -1,34 +1,4 @@
-// bind property to element
-// bind property to element, two way
-// bind property to element, three way
-// bind property to element, select & checkbox
-// bind property to selector 
-// bind property to [array of elements]
-
-// bind with special binding (show, bgcolor, clickhandler) 
-// bind with custom binding
-
-// bind sub-element 
-// afterhooks, interactive menus
-// binding to javascript variables
-
-// bind object to DOM node, recursively (with 'name' to signify obj's keys)
-// bind object to DOM node, recursively (with custom domAttr to signify obj's keys)
-
-// bind array of objects to element (repeater *within container - you must have container*)
-// bind array to repeater (with custom dom attr to signify obj's keys)
-// bind array as nested field, update in place
-// bind array as nested field, replace completely 
-// bind array - set new item using "set" 
-
-// bind object, including array as nested field
-
-//todos mvc
-
-
-
-
-//(function(){     
+(function(){     
     /* helpers */
     function isString(s) {
         return (typeof s == 'string');
@@ -67,7 +37,7 @@
         return toArr(elem.querySelectorAll("*")); 
     }
 
-    /* DOM manipulation */
+/* DOM manipulation */
 //return the property to access DOM element's value - 'value', 'innerHTML', 'selectedIndex', etc. 
 function getDomValueProp(elem) { 
 
@@ -299,31 +269,5 @@ window.jab = {
     bindObj: bindObj,
     bindArr: bindArr
 };
-console.log("loaded JabJS");
-//}());
-
-transport = {car: 'my car', bus: 'my bus2', boat: 'my boat3', inputName: 'zomba2'};
-//bindNames(transport, div2);
-// function loopNodeChildren(node) {
-//     var children = toArray(node.children);    
-//     children.forEach(function (child) { 
-//         log(child); 
-//         loopNodeChildren(child);
-//     })
-// }
-// log = function(s) {console.log(s);}
-// loopNodeChildren(div2);
-//        var node;
-//     for(var i=0;i<nodes.length;i++)
-//     {
-//         node = nodes[i];
-//         if(output)
-//         {
-//             outputNode(node);
-//         }
-//         if(node.childNodes)
-//         {
-//             recurseDomChildren(node, output);
-//         }
-//     }
-// }
+//console.log("loaded JabJS");
+}());
