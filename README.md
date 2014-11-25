@@ -59,7 +59,7 @@ That's it, you can now bind your objects to your DOM.using `jab.bind`, `jab.bind
 #### Demos and specs Page
 You are also encourage to download this repo and open [demos/specs.html](/demo/specs.html), which includes a working example of every piece of functionality.
 
-You may also download and observe [demos/todomvc/app.js](demos/todomvc/app.js), a working example of a Todo app, per the TodoMVC standard demonstration of JS libs.
+You may also download and observe [demos/todomvc/app.js](demos/todomvc/app.js), a working example of a Todo app, per the [TodoMVC](http://todomvc.com/) standard demonstration of JS libs.
 
 Concretely, to view a JabJS app in action:
 
