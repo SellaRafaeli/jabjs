@@ -61,7 +61,7 @@ You are also encourage to download this repo and open [demos/specs.html](/demo/s
 
 You may also download and observe [demos/todomvc/app.js](demos/todomvc/app.js), a working example of a Todo app, per the [TodoMVC](http://todomvc.com/) standard demonstration of JS libs.
 
-Concretely, to view a JabJS app in action:
+Concretely, to view JabJS Todo app in action:
 
 ```
 1. $ git clone git@github.com:SellaRafaeli/jabjs.git
