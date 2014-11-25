@@ -92,7 +92,7 @@ function getDomValueProp(elem) {
         switch(opts.func) {
             case 'show': return show;
             case 'bgcolor': return bgcolor;                                
-            case 'disable': return disable;                                                               
+            case 'disable': return disable;
             case 'enter': return enter;
         }
     }
@@ -203,8 +203,8 @@ function bindMarkupCallbacks(obj, elems) {
                     
                     else { //immediate, literal callbacks
                         var parts = cbName.split('-');
-                        if (parts[0] == 'addClass')       elem.classList.add(parts[1]);                        
-                        if (parts[1] == 'removeClass')  elem.classList.removeClass(parts[1]);                         
+                        if (parts[0] == 'addClass') elem.classList.add(parts[1]);                        
+                        if (parts[1] == 'removeClass')  elem.classList.removeClass(parts[1])
                     }
                 }
             }

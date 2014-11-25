@@ -126,12 +126,11 @@ jab.bind(user, 'name', document.getElementById('input'), 'show')
 
 which 'shows' the element (makes it visible) if and only if user.name is a truthy value.
 
-Another default special binding is the `click` binding, which adds the value as an 'onclick' handler to the binded elements. Notice this requires the `value` to be a **function**.
+Another default special binding is the `disable` binding, which add a 'disabled' attribute to the binded elements if and only if the binded value is falsy.
 
 ```js
-alertClicked = function(){ alert('clicked') };
-user.clickHandler = alertClicked;
-jab.bind(user, 'clickHandler', document.getElementById('input'), {func: 'click'});
+user.inputDisabled = true;
+jab.bind(user, 'inputDisabled', document.getElementById('input'), 'disable');
 ```
 
 #### Custom Bindings
@@ -344,6 +343,49 @@ friends.cast = [{character: "Chandler"}, { character: "Joey"}]; //replace or mod
 friends.city = "New York";
 friends.rating = 9.9;
 ```
+
+#### Bind DOM events declaratively 
+
+Jab allows you to specify to callbacks for DOM events on elements binded to an object as follows:
+
+```html
+<div jab-eventName="myFunc">
+```
+
+In the above example, assuming the `<div>` has been binded to an object `obj`, then when the event `eventName` is triggered on the `div`, the callback `myFunc` will be executed on `obj` (`obj.myFunc()` will be executed). In other words, the above binding will be the equivalent of:
+
+```html
+<div oneventName='obj.myFunc()'>
+```
+
+Let's observe a concrete example:
+
+```html
+<div id="friendsElem">
+    <div name="cast"> 
+        <p name="character" jab-click='sayName'></p>
+    </div>
+
+    <div name="city" jab-mouseover='alertCity'></div>
+</div>
+```
+
+```js                        
+<script class="script">
+      friends = { 
+          cast: [ {character: 'Rachel', sayName: function() { alert("Rachel!"); }},
+                  {character: 'Monica', sayName: function() { alert("I am Monica") }}
+                ], 
+          city: "New York",
+          alertCity: function() { alert("City is "+this.city); }
+      };
+
+      jab.bindObj(friends, '#friendsElem');      
+</script> 
+```
+
+After running the above, clicking on a character will trigger alerting their name, and moving the mouse over the city will trigger 'alertCity'. 
+
 
 #### Technical Points
 * Stand-alone & dependency-free, simply include and run.

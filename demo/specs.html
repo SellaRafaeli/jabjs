@@ -110,15 +110,17 @@ function setVal(selector, val) {
 
     <li>
         <h4> Special Bindings (Not 'sync values') </h4>            
-        <div id="fatima">Am I visible? Do I respond to clicks?</div>
+        <input id="fatima" value='Am I visible? Am I disabled?' style='width: 200px; height: 40px'>
         
          <script class="script">
-            fatima = {shouldShow: 'false', backgroundColor: 'lightgreen', clickHandler: function(){ console.log("no-op") } };            
+            fatima = {shouldShow: 'false', backgroundColor: 'lightgreen', inputDisabled: false};            
             jab.bind(fatima, 'shouldShow', "#fatima", 'show');                        
             jab.bind(fatima, 'backgroundColor', "#fatima", 'bgcolor');                                    
+            jab.bind(fatima, 'inputDisabled', "#fatima", 'disable');                                    
 
             fatima.backgroundColor = 'lightblue';
             fatima.shouldShow = true;
+            fatima.inputDisabled = true;
         </script>                    
     </li>
 
@@ -324,7 +326,7 @@ function setVal(selector, val) {
                      </div>
                 </section>
                 
-                <p name="city"></p>
+                <p name="city" jab-mouseover='alertCity'></p>
                 
                 <div name="rating"></div> 
                 <input name="rating">
@@ -335,6 +337,7 @@ function setVal(selector, val) {
                     cast: [ {character: 'Rachel'}, {character: 'Monica'} ], 
                     city: "NY",
                     rating: 9,
+                    alertCity: function() { alert("City is "+this.city); }
                 };
 
                 jab.bindObj(friends, '#friendsElem');
