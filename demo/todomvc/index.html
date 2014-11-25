@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>JabJS • TodoMVC</title>
+		<link rel="stylesheet" href="base.css">		
+	</head>
+	<body>
+		<section id="todoapp">
+			<header id="header">
+				<h1>jabjs - todos</h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox" jab-click="markAll">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul id="todo-list">					
+					<li class="todo" name="todos" jab-dblclick="addClass-editing" >
+						<div class="view">
+							<input class="toggle" type="checkbox" name="completed" jab-click="calc" >
+							<label name="name"></label>
+							<button class="destroy" jab-click="destroy"></button>
+						</div>
+						<input class="edit" name="name" jab-blur="stopEditingMode">
+					</li>
+				</ul>
+			</section>
+			<footer id="footer">				
+				<span id="todo-count"><strong name="numActive">1</strong> item left</span>	
+				<button id="clear-completed" jab-click="removeCompleted">Clear completed (<span name="numCompleted">1</span>)</button>
+			</footer>
+		</section>
+		<footer id="info">
+			<p>Double-click to edit a todo</p>			
+			<p>Created by <a href="http://sellarafaeli.com">you</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+
+        <script src="jab.js"></script>
+		<script src="app.js"></script>
+	</body>
+</html>
