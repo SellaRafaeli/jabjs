@@ -59,15 +59,16 @@ That's it, you can now bind your objects to your DOM.using `jab.bind`, `jab.bind
 #### Demos and specs Page
 You are also encourage to download this repo and open [demos/specs.html](/demo/specs.html), which includes a working example of every piece of functionality.
 
-You may also download and observe [demos/todomvc/app.js], a working example of a Todo app, per the TodoMVC standard demonstration of JS libs.
+You may also download and observe [demos/todomvc/app.js](demos/todomvc/app.js), a working example of a Todo app, per the TodoMVC standard demonstration of JS libs.
 
 Concretely, to view a JabJS app in action:
 
+```
 1. $ git clone git@github.com:SellaRafaeli/jabjs.git
 2. cd demos/todomvc
 3. python -m SimpleHTTPServer 8000 # assuming you have python
 4. # browse to localhost:8000
-
+```
 
 #### Bind To Element
 Suppose you have an HTML element `<div id="div"></div>` and a POJS (plain old JavaScript object) 
